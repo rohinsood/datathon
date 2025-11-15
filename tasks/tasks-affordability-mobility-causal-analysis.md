@@ -1,0 +1,371 @@
+# Task List: Affordability Gap and Economic Mobility Causal Analysis
+
+## Relevant Files
+
+### Primary Notebooks
+- `/notebooks/01_data_preparation.ipynb` - Data loading, cleaning, merging, and feature engineering
+- `/notebooks/02_exploratory_analysis.ipynb` - Descriptive statistics and initial visualizations
+- `/notebooks/03_causal_inference.ipynb` - All causal methods (PSM, DR, DoWhy, Regression)
+- `/notebooks/04_equity_analysis.ipynb` - Heterogeneous effects and subgroup analysis
+- `/notebooks/05_visualizations.ipynb` - Publication-ready plots and figures
+- `/notebooks/06_final_report.ipynb` - Integrated report with all key findings
+
+### Support Files
+- `/notebooks/utils.py` - Helper functions (data processing, causal inference, visualization utilities)
+- `/outputs/figures/` - Directory for all plots (PNG/SVG)
+- `/outputs/tables/` - Directory for CSV tables with results
+- `/outputs/data/` - Cleaned and processed datasets
+- `/outputs/methodology_summary.pdf` - Final methodology document
+- `/outputs/presentation_slides.pptx` - Final slide deck
+- `requirements.txt` - Python dependencies
+- `README.md` - Project documentation and instructions
+
+### Notes
+
+- All analysis will be conducted in Jupyter notebooks in `/notebooks/` directory
+- Each notebook section should have a **markdown cell with testing directions** before code cells
+- Testing directions should specify what to verify/check after running code
+- Helper functions should be in `/notebooks/utils.py` and imported as needed
+- Output files (figures, tables, reports) saved to `/outputs/` subdirectories
+- Use virtual environment for dependency management
+- Run cells sequentially and verify output before proceeding to next section
+
+## Instructions for Completing Tasks
+
+**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
+
+Example:
+- `- [ ] 1.1 Read file` → `- [x] 1.1 Read file` (after completing)
+
+Update the file after completing each sub-task, not just after completing an entire parent task.
+
+## Tasks
+
+- [ ] 0.0 Create feature branch and project structure
+  - [ ] 0.1 Create and checkout a new branch (e.g., `git checkout -b analysis/affordability-mobility`)
+  - [ ] 0.2 Create directory structure: `/notebooks/`, `/outputs/`, `/outputs/figures/`, `/outputs/tables/`, `/outputs/data/`
+  - [ ] 0.3 Create `requirements.txt` with dependencies: pandas, numpy, scipy, statsmodels, scikit-learn, dowhy, econml, causalml, matplotlib, seaborn, plotly, shap, jupyter, nbformat, ipykernel
+  - [ ] 0.4 Initialize virtual environment and install dependencies
+  - [ ] 0.5 Create placeholder Jupyter notebooks: `01_data_preparation.ipynb`, `02_exploratory_analysis.ipynb`, `03_causal_inference.ipynb`, `04_equity_analysis.ipynb`, `05_visualizations.ipynb`, `06_final_report.ipynb`
+  - [ ] 0.6 Create `/notebooks/utils.py` for helper functions
+  - [ ] 0.7 Set up `.gitignore` to exclude large data files, outputs, and notebook checkpoints (.ipynb_checkpoints/)
+
+- [ ] 1.0 Data loading, cleaning, and merge (Notebook: `01_data_preparation.ipynb`)
+  - [ ] 1.1 Create markdown cell: "# Data Loading - Testing Directions: Verify both datasets load without errors, check shapes (~21K and ~6K rows), inspect first few rows for data quality"
+  - [ ] 1.2 Create code cell: Load Affordability Gap CSV with proper encoding and dtypes, display shape and first 5 rows
+  - [ ] 1.3 Create markdown cell: "## Data Inspection - Testing: Verify column names include 'Unit ID', 'Affordability Gap', 'Net Price', check for obvious data issues"
+  - [ ] 1.4 Create code cell: Load College Results CSV with proper encoding and dtypes, display shape and first 5 rows
+  - [ ] 1.5 Create code cell: Print column lists and data types for both datasets
+  - [ ] 1.6 Create markdown cell: "# Data Filtering - Testing: After filtering, expect 1,000-3,000 4-year institutions in each dataset"
+  - [ ] 1.7 Create code cell: Standardize institution ID column names to 'unit_id' in both datasets
+  - [ ] 1.8 Create code cell: Filter Affordability data to 4-year institutions (using "Highest Degree Offered" or "Institution Level"), print count before/after
+  - [ ] 1.9 Create code cell: Filter College Results data to bachelor's-granting institutions (using "Degree Level" or "Bachelor's Degrees Awarded"), print count before/after
+  - [ ] 1.10 Create markdown cell: "# Data Merging - Testing: Merge should keep 500-2,000 institutions. Document merge rate (matched/total). Check for duplicate unit_ids."
+  - [ ] 1.11 Create code cell: Merge datasets on unit_id (inner join), print merge statistics (# from left, # from right, # matched, merge rate %)
+  - [ ] 1.12 Create markdown cell: "# Missing Data Analysis - Testing: Identify key variables with >20% missing. Create missingness heatmap. Document patterns."
+  - [ ] 1.13 Create code cell: Calculate missing percentage for all columns, visualize with heatmap, print top 10 most-missing variables
+  - [ ] 1.14 Create code cell: Identify critical variables (affordability gap, earnings, grad rates, key confounders), check their missingness
+  - [ ] 1.15 Create markdown cell: "# Data Cleaning - Testing: After listwise deletion, final sample should be 500+ institutions. Verify no missing values in critical columns."
+  - [ ] 1.16 Create code cell: Apply listwise deletion for rows missing critical variables, print count before/after, verify completeness
+  - [ ] 1.17 Create code cell: Save cleaned merged dataset to `/outputs/data/merged_clean.csv`
+  - [ ] 1.18 Create markdown cell: "✅ **Checkpoint**: Final dataset should have 500+ rows, ~150+ columns, no missing values in key variables. Print final shape and sample."
+
+- [ ] 2.0 Feature engineering (Continue in `01_data_preparation.ipynb`)
+  - [ ] 2.1 Create markdown cell: "# Feature Engineering: Treatment Variable - Testing: Quartile 1 (low gap) and Quartile 4 (high gap) should each have ~25% of sample. Verify affordability gap values make sense (positive for most)."
+  - [ ] 2.2 Create code cell: Calculate affordability gap quartiles, create treatment variable (bottom 25% = low gap = 1, top 25% = high gap = 0), print counts and percentages
+  - [ ] 2.3 Create code cell: Display affordability gap distribution by quartile, show mean gap for each quartile
+  - [ ] 2.4 Create markdown cell: "# Outcome Variables - Testing: Earnings should be in reasonable range ($20K-$100K), grad rates 0-100%. Check for missing/suppressed values."
+  - [ ] 2.5 Create code cell: Extract median earnings variables (10-year overall, dependent, independent), print descriptive stats and check for missingness
+  - [ ] 2.6 Create code cell: Extract 6-year bachelor's graduation rate (overall), print descriptive stats, visualize distribution
+  - [ ] 2.7 Create markdown cell: "# Confounders: Selectivity - Testing: Admit rate should be 0-100%, test scores in valid ranges. Document % missing for each."
+  - [ ] 2.8 Create code cell: Extract selectivity variables (admit rate, SAT 25th/75th, ACT 25th/75th), print descriptive stats
+  - [ ] 2.9 Create markdown cell: "# Confounders: Institutional - Testing: Verify sector categories (public/private/for-profit), size categories, state/region coverage"
+  - [ ] 2.10 Create code cell: Extract sector, size category, state, region variables, create dummy variables as needed, print value counts
+  - [ ] 2.11 Create markdown cell: "# Confounders: Demographics - Testing: Percentages should be 0-100%, sum of race percentages should be ~100%. Check for extreme values."
+  - [ ] 2.12 Create code cell: Extract demographic variables (% Pell, % White, % Black, % Latino, % Asian, % women), print descriptive stats
+  - [ ] 2.13 Create markdown cell: "# Confounders: Resources - Testing: Expenditures should be positive, reasonable range ($5K-$50K/student). Endowment may have many zeros."
+  - [ ] 2.14 Create code cell: Extract resource variables (instructional expenditure per student, endowment per student), handle zeros/missing, print stats
+  - [ ] 2.15 Create markdown cell: "# MSI Indicators - Testing: Count institutions by MSI type. Check for overlap (some may be multiple types)."
+  - [ ] 2.16 Create code cell: Extract MSI flags (HBCU, HSI, TCU, AANAPISI, PBI), create binary indicators, print counts for each
+  - [ ] 2.17 Create markdown cell: "# Handling Missing Confounders - Testing: After imputation, verify no remaining missing values. Document imputation methods used."
+  - [ ] 2.18 Create code cell: Impute missing confounders with mean (for continuous) or mode (for categorical), add missingness indicator flags
+  - [ ] 2.19 Create code cell: Save feature-engineered dataset to `/outputs/data/analysis_ready.csv`
+  - [ ] 2.20 Create markdown cell: "✅ **Checkpoint**: Dataset has treatment, outcomes, complete confounders. Treatment groups have 200+ each. Print summary."
+
+- [ ] 3.0 Exploratory data analysis (Notebook: `02_exploratory_analysis.ipynb`)
+  - [ ] 3.1 Create markdown cell: "# Exploratory Data Analysis - Load analysis-ready data. Testing: Verify data loads correctly with all engineered features."
+  - [ ] 3.2 Create code cell: Load `/outputs/data/analysis_ready.csv`, display shape and column summary
+  - [ ] 3.3 Create markdown cell: "# Descriptive Statistics by Treatment Group - Testing: Low gap institutions should have lower affordability gaps (by definition), check if outcomes differ."
+  - [ ] 3.4 Create code cell: Generate descriptive statistics table (mean, std, min, max) comparing low gap vs high gap institutions
+  - [ ] 3.5 Create code cell: Display statistics for key variables: affordability gap, earnings, grad rate, selectivity, demographics
+  - [ ] 3.6 Create code cell: Save descriptive stats to `/outputs/tables/descriptive_stats.csv`
+  - [ ] 3.7 Create markdown cell: "# Correlation Analysis - Testing: Check for multicollinearity among confounders (|r| > 0.8 problematic). Note relationship between treatment and outcomes."
+  - [ ] 3.8 Create code cell: Create correlation matrix for key continuous variables, visualize with heatmap
+  - [ ] 3.9 Create code cell: Identify highly correlated pairs (|r| > 0.8), document potential multicollinearity issues
+  - [ ] 3.10 Create markdown cell: "# Outcome Distributions - Testing: Distributions should be roughly normal or slightly right-skewed. Identify outliers (>3 SD from mean)."
+  - [ ] 3.11 Create code cell: Plot histograms for earnings and graduation rate outcomes, overlay kernel density estimates
+  - [ ] 3.12 Create code cell: Create box plots showing outcome distributions by treatment group (low vs high gap)
+  - [ ] 3.13 Create markdown cell: "# Outlier Detection - Testing: Flag institutions with extreme values. Document decision to winsorize at 1st/99th percentile or exclude."
+  - [ ] 3.14 Create code cell: Identify outliers using IQR method or z-scores, decide on handling approach, document decisions
+  - [ ] 3.15 Create markdown cell: "# Treatment Group Balance Check (Pre-matching) - Testing: Groups should differ on confounders (that's why we need causal methods!). Calculate standardized mean differences."
+  - [ ] 3.16 Create code cell: Calculate standardized mean differences for confounders between treatment groups, identify largest imbalances
+  - [ ] 3.17 Create code cell: Create initial balance table showing SMD for key confounders (values >0.1 indicate imbalance)
+  - [ ] 3.18 Create markdown cell: "✅ **Checkpoint**: EDA complete. Treatment groups have 200+ each, outcomes vary meaningfully, confounders show imbalance justifying causal methods."
+
+- [ ] 4.0 Implement core causal inference methods (Notebook: `03_causal_inference.ipynb`)
+  - [ ] 4.1 Create markdown cell: "# Causal Inference Analysis - Load data and setup. Testing: Verify data loads with treatment, outcomes, confounders complete."
+  - [ ] 4.2 Create code cell: Load analysis-ready data, define treatment/outcome/confounder variable lists, print summary
+  - [ ] 4.3 Create markdown cell: "## Method 1: Propensity Score Matching (PSM) - Testing: After matching, standardized mean differences should be <0.1 for most confounders. Check common support."
+  - [ ] 4.4 Create code cell: Specify propensity score model (logistic regression: treatment ~ selectivity + demographics + resources + sector + state)
+  - [ ] 4.5 Create code cell: Fit propensity score model, generate predicted propensity scores for all institutions, print model summary
+  - [ ] 4.6 Create code cell: Visualize propensity score distributions for treated and control groups, check for common support (overlap)
+  - [ ] 4.7 Create markdown cell: "### IPW Weighting - Testing: Verify weights are reasonable (not extremely large). Check effective sample size after weighting."
+  - [ ] 4.8 Create code cell: Calculate inverse probability weights (IPW), print weight distribution and effective sample size
+  - [ ] 4.9 Create code cell: Calculate covariate balance BEFORE weighting (standardized mean differences), save to table
+  - [ ] 4.10 Create code cell: Calculate covariate balance AFTER weighting (standardized mean differences), verify improvement
+  - [ ] 4.11 Create markdown cell: "### ATE Estimation - Testing: Estimate should have point estimate + 95% CI. Bootstrap 1000 iterations for SE. Check if CI excludes zero."
+  - [ ] 4.12 Create code cell: Estimate ATE on earnings using IPW, calculate with bootstrap standard errors (1000 iterations)
+  - [ ] 4.13 Create code cell: Estimate ATE on graduation rate using IPW, calculate with bootstrap standard errors
+  - [ ] 4.14 Create code cell: Format PSM results table (outcome, ATE, SE, 95% CI, p-value), save to `/outputs/tables/psm_results.csv`
+  - [ ] 4.15 Create markdown cell: "## Method 2: Doubly Robust Estimation - Testing: DR should produce similar estimate to PSM but with smaller SE (more efficient). Verify CI is narrower."
+  - [ ] 4.16 Create code cell: Import econML's LinearDML or DRLearner
+  - [ ] 4.17 Create code cell: Specify outcome model (Random Forest or Linear) and propensity model (Logistic)
+  - [ ] 4.18 Create markdown cell: "### Fitting DR Models - Testing: Models should fit without errors. Print fit diagnostics if available."
+  - [ ] 4.19 Create code cell: Fit doubly robust estimator for earnings outcome, extract ATE with standard error
+  - [ ] 4.20 Create code cell: Fit doubly robust estimator for graduation rate outcome, extract ATE with standard error
+  - [ ] 4.21 Create code cell: Format DR results table (outcome, ATE, SE, 95% CI, p-value), save to `/outputs/tables/doublerobust_results.csv`
+  - [ ] 4.22 Create markdown cell: "## Method 3: DoWhy Framework - Testing: Refutation tests should NOT reject the estimate (p>0.05). If rejected, investigate assumptions."
+  - [ ] 4.23 Create code cell: Specify causal graph (DAG) string with nodes: Treatment, Earnings, GradRate, Selectivity, Demographics, Resources, Sector, State
+  - [ ] 4.24 Create code cell: Add edges representing confounding relationships (all confounders → Treatment and → Outcomes)
+  - [ ] 4.25 Create markdown cell: "### DoWhy Estimation - Testing: Backdoor adjustment should identify confounders correctly. Print identified estimand."
+  - [ ] 4.26 Create code cell: Create DoWhy CausalModel for earnings outcome with data, treatment, outcome, graph
+  - [ ] 4.27 Create code cell: Identify causal estimand using backdoor criterion, print identified confounders
+  - [ ] 4.28 Create code cell: Estimate causal effect using propensity score weighting, extract ATE estimate
+  - [ ] 4.29 Create markdown cell: "### Refutation Tests - Testing: Random cause should show no effect (p>0.05), placebo should fail, subset should be similar."
+  - [ ] 4.30 Create code cell: Run refutation test 1: Add random common cause (should not change estimate significantly)
+  - [ ] 4.31 Create code cell: Run refutation test 2: Replace treatment with random variable (should show no effect)
+  - [ ] 4.32 Create code cell: Run refutation test 3: Use subset of data (should show similar effect)
+  - [ ] 4.33 Create code cell: Document refutation results (pass/fail for each test, p-values), save summary
+  - [ ] 4.34 Create code cell: Repeat DoWhy analysis for graduation rate outcome, run same refutation tests
+  - [ ] 4.35 Create code cell: Format DoWhy results table with refutation summary, save to `/outputs/tables/dowhy_results.csv`
+  - [ ] 4.36 Create markdown cell: "## Method 4: OLS Regression with Controls - Testing: Coefficient on treatment should be significant if effect exists. Check R-squared (aim for >0.5)."
+  - [ ] 4.37 Create code cell: Specify OLS regression formula: Outcome ~ Treatment + Selectivity + Demographics + Resources + Sector + State (dummy variables)
+  - [ ] 4.38 Create code cell: Fit OLS model for earnings outcome, print regression summary with clustered SEs by state
+  - [ ] 4.39 Create code cell: Fit OLS model for graduation rate outcome, print regression summary with clustered SEs by state
+  - [ ] 4.40 Create code cell: Extract treatment coefficients, standard errors, confidence intervals, p-values from both models
+  - [ ] 4.41 Create code cell: Calculate adjusted R-squared and VIF for multicollinearity check
+  - [ ] 4.42 Create code cell: Format regression results table, save to `/outputs/tables/regression_results.csv`
+  - [ ] 4.43 Create markdown cell: "## Comparing All Methods - Testing: All 4 methods should produce directionally consistent results (same sign). If not, investigate."
+  - [ ] 4.44 Create code cell: Combine results from all 4 methods into comparison table (PSM, DR, DoWhy, OLS) for both outcomes
+  - [ ] 4.45 Create code cell: Calculate range of estimates across methods, check if confidence intervals overlap
+  - [ ] 4.46 Create code cell: Save methods comparison table to `/outputs/tables/methods_comparison.csv`
+  - [ ] 4.47 Create markdown cell: "✅ **Checkpoint**: All 4 methods complete with ATE estimates + CIs. Methods show consistent direction. Refutation tests mostly pass."
+  - [ ] 4.48 Add helper functions to `utils.py`: `calculate_smd()`, `bootstrap_ci()`, `ipw_weights()`
+
+- [ ] 5.0 Conduct equity-focused subgroup analysis (Notebook: `04_equity_analysis.ipynb`)
+  - [ ] 5.1 Create markdown cell: "# Equity Analysis: Heterogeneous Treatment Effects - Testing: Verify subgroups have adequate sample size (>50 each). Document if any subgroup too small."
+  - [ ] 5.2 Create code cell: Load analysis-ready data
+  - [ ] 5.3 Create markdown cell: "## Define Equity Subgroups - Testing: Print counts for each subgroup definition. High Pell should be ~40%+ of sample."
+  - [ ] 5.4 Create code cell: Define High Pell (>40% Pell students) vs Low Pell (<40%), print counts and descriptive stats by group
+  - [ ] 5.5 Create code cell: Define High URM (>30% Black+Latino) vs Low URM, print counts and descriptive stats by group
+  - [ ] 5.6 Create code cell: Define MSI (HBCU=1 or HSI=1 or TCU=1) vs non-MSI, print counts by MSI type
+  - [ ] 5.7 Create markdown cell: "## Subgroup-Specific Treatment Effects (Pell) - Testing: Compare ATE between High/Low Pell institutions. Effect may differ by resource context."
+  - [ ] 5.8 Create code cell: Filter to High Pell institutions, re-run PSM to estimate subgroup-specific ATE on earnings and grad rate
+  - [ ] 5.9 Create code cell: Filter to Low Pell institutions, re-run PSM to estimate subgroup-specific ATE on earnings and grad rate
+  - [ ] 5.10 Create code cell: Compare ATEs between Pell subgroups, test for significant difference (interaction test)
+  - [ ] 5.11 Create markdown cell: "## Subgroup-Specific Treatment Effects (URM) - Testing: Check if effects differ for high-URM vs low-URM institutions."
+  - [ ] 5.12 Create code cell: Filter to High URM institutions, re-run PSM to estimate subgroup-specific ATE on earnings and grad rate
+  - [ ] 5.13 Create code cell: Filter to Low URM institutions, re-run PSM to estimate subgroup-specific ATE on earnings and grad rate
+  - [ ] 5.14 Create code cell: Compare ATEs between URM subgroups, test for significant difference
+  - [ ] 5.15 Create markdown cell: "## Subgroup-Specific Treatment Effects (MSI) - Testing: HBCUs, HSIs may show different effects. Document sample sizes carefully."
+  - [ ] 5.16 Create code cell: Filter to MSI institutions, re-run PSM to estimate subgroup-specific ATE on earnings and grad rate
+  - [ ] 5.17 Create code cell: Filter to non-MSI institutions, re-run PSM to estimate subgroup-specific ATE
+  - [ ] 5.18 Create code cell: Break down MSI effects by type (HBCU, HSI, TCU separately if sample size permits)
+  - [ ] 5.19 Create markdown cell: "## Continuous CATE Estimation - Testing: Causal forest should provide CATE for each institution. Check CATE variation across covariates."
+  - [ ] 5.20 Create code cell: Import econML's CausalForestDML, specify model with treatment, outcomes, confounders
+  - [ ] 5.21 Create code cell: Fit causal forest for earnings outcome, extract CATE predictions for each institution
+  - [ ] 5.22 Create code cell: Fit causal forest for graduation rate outcome, extract CATE predictions
+  - [ ] 5.23 Create markdown cell: "### CATE Analysis by Continuous Variables - Testing: Plot CATE vs % Pell should show trend. Add confidence bands."
+  - [ ] 5.24 Create code cell: Create scatter plot of CATE vs % Pell with loess smoothing and confidence bands
+  - [ ] 5.25 Create code cell: Create scatter plot of CATE vs % URM with loess smoothing and confidence bands
+  - [ ] 5.26 Create code cell: Identify institutions with highest/lowest CATEs, print their characteristics
+  - [ ] 5.27 Create markdown cell: "## Intersectional Analysis - Testing: 8 combinations (2×2×2). Some cells may be small (<20). Report with caution."
+  - [ ] 5.28 Create code cell: Create intersectional categories (High Pell × High URM × MSI), print sample sizes for all 8 combinations
+  - [ ] 5.29 Create code cell: For adequately-sized cells (n>30), estimate separate ATEs using PSM
+  - [ ] 5.30 Create code cell: Create heatmap or table showing ATEs across intersectional categories
+  - [ ] 5.31 Create markdown cell: "## Race-Specific Graduation Rate Effects - Testing: Compare effects on graduation rates by race. May reveal equity implications."
+  - [ ] 5.32 Create code cell: Estimate treatment effect on White graduation rate separately
+  - [ ] 5.33 Create code cell: Estimate treatment effect on Black graduation rate separately
+  - [ ] 5.34 Create code cell: Estimate treatment effect on Latino graduation rate separately
+  - [ ] 5.35 Create code cell: Estimate treatment effect on Asian graduation rate separately
+  - [ ] 5.36 Create code cell: Compare effects across racial groups, calculate gap reduction/expansion
+  - [ ] 5.37 Create markdown cell: "## Multiple Comparison Correction - Testing: Apply Bonferroni correction. Some previously significant results may become non-significant."
+  - [ ] 5.38 Create code cell: Collect all subgroup p-values, apply Bonferroni correction (α = 0.05/n_tests)
+  - [ ] 5.39 Create code cell: Report both unadjusted and adjusted p-values, flag which results survive correction
+  - [ ] 5.40 Create code cell: Create comprehensive subgroup results table with all estimates, save to `/outputs/tables/heterogeneous_effects.csv`
+  - [ ] 5.41 Create markdown cell: "✅ **Checkpoint**: Subgroup analysis complete. Key finding: [Effect is stronger/weaker for High Pell/URM/MSI institutions]. See heterogeneous_effects.csv."
+
+- [ ] 6.0 Generate visualizations (Notebook: `05_visualizations.ipynb`)
+  - [ ] 6.1 Create markdown cell: "# Visualizations for Publication and Presentation - Testing: All plots should be high-res (300 dpi), colorblind-friendly, properly labeled."
+  - [ ] 6.2 Create code cell: Set up plotting configuration (use seaborn colorblind palette, font size 12+, figure size 10×8 inches, 300 dpi)
+  - [ ] 6.3 Create code cell: Import all necessary visualization libraries and load results tables from previous notebooks
+  - [ ] 6.4 Create markdown cell: "## Figure 1: Covariate Balance Plot (Love Plot) - Testing: SMD should be <0.1 post-matching for most variables. Plot should clearly show improvement."
+  - [ ] 6.5 Create code cell: Load balance statistics (before/after matching), create Love plot showing SMDs with 0.1 threshold line
+  - [ ] 6.6 Create code cell: Save covariate balance plot to `/outputs/figures/covariate_balance.png` at 300 dpi
+  - [ ] 6.7 Create markdown cell: "## Figure 2: CATE by Pell Percentage - Testing: Should show trend (positive/negative/flat). Confidence bands should not be too wide."
+  - [ ] 6.8 Create code cell: Create scatter plot (x=% Pell, y=CATE) with loess smoothing and 95% confidence bands, add reference line at y=0
+  - [ ] 6.9 Create code cell: Save CATE-Pell plot to `/outputs/figures/cate_pell.png`
+  - [ ] 6.10 Create markdown cell: "## Figure 3: CATE by URM Percentage - Testing: Similar to Pell plot. Check for heterogeneity across URM spectrum."
+  - [ ] 6.11 Create code cell: Create scatter plot (x=% URM, y=CATE) with loess smoothing and 95% confidence bands
+  - [ ] 6.12 Create code cell: Save CATE-URM plot to `/outputs/figures/cate_urm.png`
+  - [ ] 6.13 Create markdown cell: "## Figure 4: CATE by MSI Type - Testing: Bar chart should show ATEs with error bars. Check if MSI types differ significantly."
+  - [ ] 6.14 Create code cell: Create bar chart comparing ATEs across MSI types (HBCU, HSI, TCU, non-MSI) with 95% CI error bars
+  - [ ] 6.15 Create code cell: Save MSI comparison plot to `/outputs/figures/cate_msi.png`
+  - [ ] 6.16 Create markdown cell: "## Figure 5: 'Bang-for-Buck' Scatter Plot - Testing: Lower-left (low gap, high earnings) = ideal institutions. Color by Pell should show equity dimension."
+  - [ ] 6.17 Create code cell: Create scatter plot (x=Affordability Gap, y=Median Earnings), color by % Pell (continuous colormap), size by enrollment
+  - [ ] 6.18 Create code cell: Add annotations for notable institutions (identify HBCUs, HSIs with low gap + high earnings)
+  - [ ] 6.19 Create code cell: Add quadrant lines to show "high value" regions, add legend and title
+  - [ ] 6.20 Create code cell: Save bang-for-buck scatter to `/outputs/figures/bang_for_buck_scatter.png`
+  - [ ] 6.21 Create markdown cell: "## Figure 6: SHAP Feature Importance - Testing: Should show which variables matter most for graduation rate. Affordability gap should be prominent."
+  - [ ] 6.22 Create code cell: Train gradient boosting model for graduation rate prediction, compute SHAP values
+  - [ ] 6.23 Create code cell: Create SHAP summary plot (bar chart of feature importances), save to `/outputs/figures/shap_importance.png`
+  - [ ] 6.24 Create markdown cell: "## Figure 7: SHAP Dependence Plot - Testing: Should show relationship between Affordability Gap and prediction. Look for non-linear patterns."
+  - [ ] 6.25 Create code cell: Create SHAP dependence plot for Affordability Gap feature (interaction with % Pell colored)
+  - [ ] 6.26 Create code cell: Save SHAP dependence plot to `/outputs/figures/shap_dependence.png`
+  - [ ] 6.27 Create markdown cell: "## Figure 8: Methods Comparison Forest Plot - Testing: All 4 methods should show with CIs. Check for consistency (overlapping CIs)."
+  - [ ] 6.28 Create code cell: Load methods comparison table, create forest plot showing PSM, DR, DoWhy, OLS estimates with 95% CIs
+  - [ ] 6.29 Create code cell: Create separate panels for earnings outcome and grad rate outcome
+  - [ ] 6.30 Create code cell: Save methods comparison plot to `/outputs/figures/methods_comparison.png`
+  - [ ] 6.31 Create markdown cell: "## Figure 9: Subgroup Effects Plot - Testing: Bar chart with error bars. Highlight which subgroups show strongest effects."
+  - [ ] 6.32 Create code cell: Load heterogeneous effects table, create grouped bar chart for Pell/URM/MSI subgroups
+  - [ ] 6.33 Create code cell: Add significance stars (* p<0.05, ** p<0.01) based on adjusted p-values
+  - [ ] 6.34 Create code cell: Save subgroup effects plot to `/outputs/figures/subgroup_effects.png`
+  - [ ] 6.35 Create markdown cell: "## Summary Figure Gallery - Testing: Create notebook display showing all key figures in one view for quick review."
+  - [ ] 6.36 Create code cell: Display all generated figures in notebook using IPython.display
+  - [ ] 6.37 Create markdown cell: "✅ **Checkpoint**: All 9 figures generated at 300 dpi, saved to /outputs/figures/. Verify visual quality and clarity."
+  - [ ] 6.38 Add helper functions to `utils.py`: `apply_plot_style()`, `save_figure()`, `annotate_plot()`
+
+- [ ] 7.0 Create final report and deliverables (Notebook: `06_final_report.ipynb`)
+  - [ ] 7.1 Create markdown cell: "# Final Integrated Report: Does Affordability Actually Buy Mobility? - This notebook synthesizes all findings for stakeholders."
+  - [ ] 7.2 Create markdown cell: "## Executive Summary - [To be filled after analysis complete]"
+  - [ ] 7.3 Create markdown cell: "## 1. Introduction - Research Question: Do institutions with lower affordability gaps produce better earnings/graduation outcomes after controlling for selectivity and student composition?"
+  - [ ] 7.4 Create markdown cell: "### 1.1 Data Sources - Affordability Gap Data (AY2022-23, ~21K institutions), College Results (2021, ~6K institutions). Final merged sample: [XXX] 4-year institutions."
+  - [ ] 7.5 Create markdown cell: "### 1.2 Temporal Considerations - NOTE: Outcomes (2021) precede affordability measures (2022-23). Analysis assumes temporal stability. Results are correlational with causal-style controls."
+  - [ ] 7.6 Create code cell: Load and display final sample descriptive statistics table
+  - [ ] 7.7 Create markdown cell: "## 2. Methodology Summary - Testing: Verify all 4 methods are described clearly for non-technical audience."
+  - [ ] 7.8 Create markdown cell: "### 2.1 Causal Graph (DAG) - Nodes: Affordability Gap (treatment), Earnings & Grad Rates (outcomes), Confounders (selectivity, demographics, resources, sector, geography)."
+  - [ ] 7.9 Create code cell: Display DAG visualization (use graphviz or networkx to draw causal graph)
+  - [ ] 7.10 Create markdown cell: "### 2.2 Treatment Definition - Low affordability gap = bottom 25% quartile. High affordability gap = top 25% quartile. Comparing these extremes."
+  - [ ] 7.11 Create markdown cell: "### 2.3 Outcome Variables - (1) Median earnings 10 years after entry, (2) 6-year bachelor's graduation rate. Both analyzed as continuous outcomes."
+  - [ ] 7.12 Create markdown cell: "### 2.4 Confounders Controlled - Selectivity (admit rate, SAT/ACT), Demographics (% Pell, % URM, % women), Resources (expenditures, endowment), Sector, Geography, MSI status."
+  - [ ] 7.13 Create markdown cell: "### 2.5 Causal Inference Methods - (1) Propensity Score Matching/IPW, (2) Doubly Robust Estimation, (3) DoWhy with Refutation Tests, (4) OLS Regression with Controls."
+  - [ ] 7.14 Create markdown cell: "## 3. Main Results - Testing: Present ATE estimates from all 4 methods. Highlight if statistically significant."
+  - [ ] 7.15 Create code cell: Display methods comparison table with ATEs and 95% CIs for both outcomes
+  - [ ] 7.16 Create code cell: Display methods comparison forest plot (embed figure from earlier notebook)
+  - [ ] 7.17 Create markdown cell: "### 3.1 Earnings Impact - Low affordability gap institutions show [+$X,XXX / -$X,XXX] higher/lower median earnings (p=[X.XX]). Range across methods: [$X to $Y]."
+  - [ ] 7.18 Create markdown cell: "### 3.2 Graduation Rate Impact - Low affordability gap institutions show [+X% / -X%] higher/lower graduation rates (p=[X.XX]). Range across methods: [X% to Y%]."
+  - [ ] 7.19 Create markdown cell: "### 3.3 Robustness - DoWhy refutation tests: [passed/failed]. Covariate balance achieved (SMD<0.1 for [X/Y] confounders). Results consistent across methods."
+  - [ ] 7.20 Create markdown cell: "## 4. Equity Findings - Testing: Highlight differential effects for marginalized groups. This is the key policy-relevant finding."
+  - [ ] 7.21 Create code cell: Display subgroup effects table (Pell, URM, MSI comparisons)
+  - [ ] 7.22 Create code cell: Display subgroup effects bar chart (embed figure)
+  - [ ] 7.23 Create markdown cell: "### 4.1 Effects for High-Pell Institutions - Affordability matters [more/less/same] for high-Pell institutions. ATE = [X], vs [Y] for low-Pell (p=[X.XX])."
+  - [ ] 7.24 Create markdown cell: "### 4.2 Effects for High-URM Institutions - Affordability matters [more/less/same] for high-URM institutions. ATE = [X], vs [Y] for low-URM (p=[X.XX])."
+  - [ ] 7.25 Create markdown cell: "### 4.3 Effects for MSIs - HBCUs show [strongest/weakest] effects (ATE=[X]). HSIs show ATE=[Y]. TCUs show ATE=[Z]."
+  - [ ] 7.26 Create code cell: Display bang-for-buck scatter plot highlighting equity dimension
+  - [ ] 7.27 Create markdown cell: "### 4.4 'High Value' Institutions - Institutions in lower-left quadrant (low gap, high earnings) include: [list 5-10 notable examples, especially MSIs]."
+  - [ ] 7.28 Create markdown cell: "## 5. Limitations and Caveats - Testing: Be transparent about assumptions and threats to validity."
+  - [ ] 7.29 Create markdown cell: "### 5.1 Temporal Mismatch - Outcomes measured in 2021, affordability in 2022-23. Assumes institutional characteristics are stable. Limits strict causal interpretation."
+  - [ ] 7.30 Create markdown cell: "### 5.2 Institution-Level Analysis - Using aggregate institutional data, not individual student records. Cannot directly observe within-institution heterogeneity."
+  - [ ] 7.31 Create markdown cell: "### 5.3 Observational Study - Despite causal methods, this is observational data. Unobserved confounding possible (though refutation tests help rule out)."
+  - [ ] 7.32 Create markdown cell: "### 5.4 Selection Bias - Students select into institutions. Affordability is endogenous to student characteristics. We control for observables but residual selection may remain."
+  - [ ] 7.33 Create markdown cell: "### 5.5 Data Suppression - Earnings data suppressed for small institutions/programs. May bias toward larger, better-resourced institutions."
+  - [ ] 7.34 Create markdown cell: "## 6. Conclusions and Recommendations - Testing: Provide 3-5 actionable recommendations for policy/practice."
+  - [ ] 7.35 Create markdown cell: "### Key Finding - [Lower/Higher] affordability gaps are associated with [better/worse] earnings and graduation outcomes, especially for [Pell/URM/MSI] students."
+  - [ ] 7.36 Create markdown cell: "### Recommendation 1 - [Invest in need-based aid / Reduce net prices for low-income students / Expand work-study programs, etc.]"
+  - [ ] 7.37 Create markdown cell: "### Recommendation 2 - [Target support to high-Pell institutions / Focus on MSIs showing effectiveness, etc.]"
+  - [ ] 7.38 Create markdown cell: "### Recommendation 3 - [Monitor affordability gaps as accountability metric / Incentivize low-gap, high-outcome models, etc.]"
+  - [ ] 7.39 Create markdown cell: "### Recommendation 4 - [Future research with longitudinal data / Student-level analysis, etc.]"
+  - [ ] 7.40 Create markdown cell: "## 7. Appendix: All Figures"
+  - [ ] 7.41 Create code cell: Display all 9 figures generated in previous notebook (covariate balance, CATE plots, scatter, SHAP, methods comparison, subgroups)
+  - [ ] 7.42 Create markdown cell: "## 8. Appendix: Interactive Visualizations - Testing: Plotly plot should be hoverable. Verify institution names appear on hover."
+  - [ ] 7.43 Create code cell: Create interactive Plotly version of bang-for-buck scatter with hover showing institution name, state, MSI status
+  - [ ] 7.44 Create code cell: Add Plotly controls for filtering by sector, state, MSI type
+  - [ ] 7.45 Create markdown cell: "---\n## End of Report\n**Analysis completed:** [Date]\n**Notebooks:** 01-06_*.ipynb\n**Output files:** /outputs/figures/, /outputs/tables/\n**Code repository:** [Link if applicable]"
+  - [ ] 7.46 Create code cell: Run all previous notebooks programmatically to verify end-to-end reproducibility (use nbconvert or papermill)
+  - [ ] 7.47 Create markdown cell in separate notebook `07_generate_slides.ipynb`: "# Generate PowerPoint Slides - This notebook creates a presentation deck using python-pptx."
+  - [ ] 7.48 Create code cell: Import python-pptx, create blank presentation, set slide dimensions
+  - [ ] 7.49 Create code cell: Add Slide 1 - Title slide with research question
+  - [ ] 7.50 Create code cell: Add Slide 2 - Data overview (sample size, institutions, time period)
+  - [ ] 7.51 Create code cell: Add Slide 3 - Methods summary (4 approaches, causal graph visual)
+  - [ ] 7.52 Create code cell: Add Slide 4 - Main results (methods comparison forest plot, key ATE estimates)
+  - [ ] 7.53 Create code cell: Add Slide 5 - Bang-for-buck scatter plot
+  - [ ] 7.54 Create code cell: Add Slide 6 - Subgroup/equity effects (bar chart with findings text)
+  - [ ] 7.55 Create code cell: Add Slide 7 - Limitations (bullet points)
+  - [ ] 7.56 Create code cell: Add Slide 8 - Recommendations (3-5 actionable bullets)
+  - [ ] 7.57 Create code cell: Save presentation to `/outputs/presentation_slides.pptx`
+  - [ ] 7.58 Create methodology summary document in markdown: Create `/outputs/methodology_summary.md` with sections: Introduction, Methods, Results, Limitations
+  - [ ] 7.59 Write methodology doc: Causal graph/DAG description with all nodes and edges
+  - [ ] 7.60 Write methodology doc: Treatment and outcome definitions with measurement details
+  - [ ] 7.61 Write methodology doc: Complete confounder list with justifications for inclusion
+  - [ ] 7.62 Write methodology doc: Detailed methods descriptions (PSM, DR, DoWhy, OLS) with formulas
+  - [ ] 7.63 Write methodology doc: Results section with ATE tables and interpretation
+  - [ ] 7.64 Write methodology doc: Limitations section (temporal, observational, selection, data quality)
+  - [ ] 7.65 Convert methodology summary to PDF using pandoc: `pandoc methodology_summary.md -o methodology_summary.pdf`
+  - [ ] 7.66 Update `README.md`: Add project overview, research question, key findings summary
+  - [ ] 7.67 Update `README.md`: Add data sources with file paths and descriptions
+  - [ ] 7.68 Update `README.md`: Add "How to Run" section with notebook execution order
+  - [ ] 7.69 Update `README.md`: Add dependencies (requirements.txt) and setup instructions
+  - [ ] 7.70 Update `README.md`: Add results summary with headline findings
+  - [ ] 7.71 Update `README.md`: Add links to outputs (figures, tables, final report, slides)
+  - [ ] 7.72 Create markdown cell: "✅ **All Deliverables Complete**: Final report notebook, PowerPoint slides, methodology PDF, updated README. Verify all files open correctly."
+
+- [ ] 8.0 Final review and quality assurance
+  - [ ] 8.1 Create markdown cell in review notebook: "# Quality Assurance Checklist - Systematic review of all analysis components. Testing: Each QA check should pass before finalizing."
+  - [ ] 8.2 Create markdown cell: "## QA Check 1: Covariate Balance - Testing: SMD <0.1 for at least 80% of confounders after matching."
+  - [ ] 8.3 Create code cell: Load balance results from causal inference notebook, calculate % of confounders with SMD <0.1
+  - [ ] 8.4 Create code cell: Identify any confounders with persistent imbalance (SMD >0.2), document and justify
+  - [ ] 8.5 Create markdown cell: "## QA Check 2: Sample Sizes - Testing: Main analysis >500 institutions, each treatment group >200, subgroups >50."
+  - [ ] 8.6 Create code cell: Print sample sizes for main analysis, treatment groups, all subgroups (Pell, URM, MSI, intersectional)
+  - [ ] 8.7 Create code cell: Flag any subgroups with n<50 as underpowered, document in limitations
+  - [ ] 8.8 Create markdown cell: "## QA Check 3: Methods Consistency - Testing: All 4 methods should agree on direction (same sign). CIs should overlap."
+  - [ ] 8.9 Create code cell: Load methods comparison table, check if all 4 methods have same sign for each outcome
+  - [ ] 8.10 Create code cell: Calculate range of estimates, check if confidence intervals overlap, flag discrepancies
+  - [ ] 8.11 Create markdown cell: "## QA Check 4: Statistical Significance - Testing: Document which findings are significant (p<0.05). Don't overstate non-significant results."
+  - [ ] 8.12 Create code cell: Create table of all ATE estimates with p-values, flag significant results (unadjusted and Bonferroni-adjusted)
+  - [ ] 8.13 Create code cell: Write summary: "X of Y main effects significant. After Bonferroni: X of Y remain significant."
+  - [ ] 8.14 Create markdown cell: "## QA Check 5: Visualization Quality - Testing: All figures 300 dpi, proper labels, colorblind-safe, readable legends."
+  - [ ] 8.15 Create code cell: Load all figures from /outputs/figures/, display in notebook for visual inspection
+  - [ ] 8.16 Create code cell: Check file sizes (should be reasonable, not MB each) and resolutions, verify 300 dpi
+  - [ ] 8.17 Create markdown cell: "## QA Check 6: Code Quality - Testing: Code should be commented, no unused variables, consistent naming conventions."
+  - [ ] 8.18 Create code cell: Review all notebooks (01-07) for code quality, add comments where missing
+  - [ ] 8.19 Create code cell: Check for TODO comments or placeholder values, resolve all before finalizing
+  - [ ] 8.20 Create markdown cell: "## QA Check 7: Reproducibility - Testing: Run all notebooks sequentially from scratch. Should execute without errors."
+  - [ ] 8.21 Create code cell: Use papermill or nbconvert to execute all notebooks programmatically, capture any errors
+  - [ ] 8.22 Create code cell: Verify output files regenerated correctly (figures, tables match previous versions)
+  - [ ] 8.23 Create markdown cell: "## QA Check 8: Deliverables Quality - Testing: Proofread all text for typos, check formulas, verify citations if any."
+  - [ ] 8.24 Create code cell: Open and review methodology_summary.pdf for completeness and clarity
+  - [ ] 8.25 Create code cell: Open and review presentation_slides.pptx for visual quality and messaging
+  - [ ] 8.26 Create code cell: Review README.md for accuracy, completeness, and helpful instructions
+  - [ ] 8.27 Create markdown cell: "## Final Synthesis - Testing: Verify summary tables and recommendations are data-driven and justified."
+  - [ ] 8.28 Create code cell: Create comprehensive summary table with ATEs from all methods (PSM, DR, DoWhy, OLS) side-by-side
+  - [ ] 8.29 Create code cell: Save summary table to `/outputs/tables/final_summary.csv`
+  - [ ] 8.30 Create markdown cell: "### Policy Recommendations - Based on findings, recommend:"
+  - [ ] 8.31 Create markdown cell: "1. [Specific recommendation 1 with supporting data: e.g., 'Increase need-based aid given $X,XXX earnings boost']"
+  - [ ] 8.32 Create markdown cell: "2. [Specific recommendation 2: e.g., 'Prioritize support for high-Pell institutions where effects are strongest']"
+  - [ ] 8.33 Create markdown cell: "3. [Specific recommendation 3: e.g., 'Replicate low-gap, high-outcome models from [institution types]']"
+  - [ ] 8.34 Create markdown cell: "### Institution Type Findings - Document strongest/weakest effects"
+  - [ ] 8.35 Create code cell: Identify institution types (by sector, size, MSI status) with largest positive effects
+  - [ ] 8.36 Create code cell: Identify institution types with smallest or negative effects, propose explanations
+  - [ ] 8.37 Create markdown cell: "### Surprising Findings - Document counterintuitive or unexpected results"
+  - [ ] 8.38 Create code cell: List any results that contradict conventional wisdom or prior literature
+  - [ ] 8.39 Create code cell: Propose explanations or hypotheses for surprising findings
+  - [ ] 8.40 Create markdown cell: "## Git Commit Preparation - Testing: Stage all relevant files, write clear commit message."
+  - [ ] 8.41 Run terminal command: Stage all notebooks, outputs, and documentation: `git add notebooks/ outputs/ README.md requirements.txt`
+  - [ ] 8.42 Run terminal command: Commit with descriptive message: `git commit -m "Complete affordability-mobility causal analysis with 4 methods, equity analysis, and deliverables"`
+  - [ ] 8.43 Create markdown cell: "## Final Summary Document"
+  - [ ] 8.44 Create markdown cell: "### Completed Work - ✅ Data preparation (merged X institutions), ✅ 4 causal methods (PSM, DR, DoWhy, OLS), ✅ Equity analysis (Pell/URM/MSI), ✅ 9 publication-ready figures, ✅ Final report notebook, ✅ Methodology PDF, ✅ Presentation slides"
+  - [ ] 8.45 Create markdown cell: "### Key Findings - [1-2 paragraph summary of main results and equity implications]"
+  - [ ] 8.46 Create markdown cell: "### Outstanding Limitations - [List any unresolved issues: temporal mismatch, small subgroups, data quality concerns, etc.]"
+  - [ ] 8.47 Create markdown cell: "### Next Steps - [Suggestions for future research: longitudinal data, student-level analysis, additional outcomes, etc.]"
+  - [ ] 8.48 Create markdown cell: "✅ **Analysis Complete**: All tasks finished. Review complete. Ready for stakeholder presentation."
+
