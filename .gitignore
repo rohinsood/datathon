@@ -125,20 +125,20 @@ dmypy.json
 .pyre/
 
 # Data files (large datasets)
-*.csv
+# *.csv
 *.xlsx
 *.xls
-*.json
+# *.json
 *.parquet
 *.feather
 *.hdf5
 *.h5
 
 # Output files
-outputs/
-results/
-figures/
-plots/
+# outputs/
+# results/
+# figures/
+# plots/
 
 # Model files
 *.pkl
@@ -171,7 +171,6 @@ Thumbs.db
 
 # Logs
 *.log
-logs/
 
 # Secrets
 .env.local
