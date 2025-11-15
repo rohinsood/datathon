@@ -126,7 +126,7 @@ dmypy.json
 .pyre/
 
 # Data files (large datasets)
-*.csv
+# *.csv
 *.xlsx
 *.xls
 *.json
