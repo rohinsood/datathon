@@ -139,8 +139,8 @@ dmypy.json
 # outputs/figures/*.png
 # outputs/tables/*.csv
 # outputs/data/*.csv
-outputs/data/merged_clean.csv
-outputs/data/analysis_ready.csv
+# outputs/data/merged_clean.csv
+# outputs/data/analysis_ready.csv
 
 # Model files
 *.pkl
