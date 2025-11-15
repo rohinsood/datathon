@@ -50,47 +50,47 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 0.6 Create `/notebooks/utils.py` for helper functions
   - [x] 0.7 Set up `.gitignore` to exclude large data files, outputs, and notebook checkpoints (.ipynb_checkpoints/)
 
-- [ ] 1.0 Data loading, cleaning, and merge (Notebook: `01_data_preparation.ipynb`)
-  - [ ] 1.1 Create markdown cell: "# Data Loading - Testing Directions: Verify both datasets load without errors, check shapes (~21K and ~6K rows), inspect first few rows for data quality"
-  - [ ] 1.2 Create code cell: Load Affordability Gap CSV with proper encoding and dtypes, display shape and first 5 rows
-  - [ ] 1.3 Create markdown cell: "## Data Inspection - Testing: Verify column names include 'Unit ID', 'Affordability Gap', 'Net Price', check for obvious data issues"
-  - [ ] 1.4 Create code cell: Load College Results CSV with proper encoding and dtypes, display shape and first 5 rows
-  - [ ] 1.5 Create code cell: Print column lists and data types for both datasets
-  - [ ] 1.6 Create markdown cell: "# Data Filtering - Testing: After filtering, expect 1,000-3,000 4-year institutions in each dataset"
-  - [ ] 1.7 Create code cell: Standardize institution ID column names to 'unit_id' in both datasets
-  - [ ] 1.8 Create code cell: Filter Affordability data to 4-year institutions (using "Highest Degree Offered" or "Institution Level"), print count before/after
-  - [ ] 1.9 Create code cell: Filter College Results data to bachelor's-granting institutions (using "Degree Level" or "Bachelor's Degrees Awarded"), print count before/after
-  - [ ] 1.10 Create markdown cell: "# Data Merging - Testing: Merge should keep 500-2,000 institutions. Document merge rate (matched/total). Check for duplicate unit_ids."
-  - [ ] 1.11 Create code cell: Merge datasets on unit_id (inner join), print merge statistics (# from left, # from right, # matched, merge rate %)
-  - [ ] 1.12 Create markdown cell: "# Missing Data Analysis - Testing: Identify key variables with >20% missing. Create missingness heatmap. Document patterns."
-  - [ ] 1.13 Create code cell: Calculate missing percentage for all columns, visualize with heatmap, print top 10 most-missing variables
-  - [ ] 1.14 Create code cell: Identify critical variables (affordability gap, earnings, grad rates, key confounders), check their missingness
-  - [ ] 1.15 Create markdown cell: "# Data Cleaning - Testing: After listwise deletion, final sample should be 500+ institutions. Verify no missing values in critical columns."
-  - [ ] 1.16 Create code cell: Apply listwise deletion for rows missing critical variables, print count before/after, verify completeness
-  - [ ] 1.17 Create code cell: Save cleaned merged dataset to `/outputs/data/merged_clean.csv`
-  - [ ] 1.18 Create markdown cell: "✅ **Checkpoint**: Final dataset should have 500+ rows, ~150+ columns, no missing values in key variables. Print final shape and sample."
+- [x] 1.0 Data loading, cleaning, and merge (Notebook: `01_data_preparation.ipynb`)
+  - [x] 1.1 Create markdown cell: "# Data Loading - Testing Directions: Verify both datasets load without errors, check shapes (~21K and ~6K rows), inspect first few rows for data quality"
+  - [x] 1.2 Create code cell: Load Affordability Gap CSV with proper encoding and dtypes, display shape and first 5 rows
+  - [x] 1.3 Create markdown cell: "## Data Inspection - Testing: Verify column names include 'Unit ID', 'Affordability Gap', 'Net Price', check for obvious data issues"
+  - [x] 1.4 Create code cell: Load College Results CSV with proper encoding and dtypes, display shape and first 5 rows
+  - [x] 1.5 Create code cell: Print column lists and data types for both datasets
+  - [x] 1.6 Create markdown cell: "# Data Filtering - Testing: After filtering, expect 1,000-3,000 4-year institutions in each dataset"
+  - [x] 1.7 Create code cell: Standardize institution ID column names to 'unit_id' in both datasets
+  - [x] 1.8 Create code cell: Filter Affordability data to 4-year institutions (using "Highest Degree Offered" or "Institution Level"), print count before/after
+  - [x] 1.9 Create code cell: Filter College Results data to bachelor's-granting institutions (using "Degree Level" or "Bachelor's Degrees Awarded"), print count before/after
+  - [x] 1.10 Create markdown cell: "# Data Merging - Testing: Merge should keep 500-2,000 institutions. Document merge rate (matched/total). Check for duplicate unit_ids."
+  - [x] 1.11 Create code cell: Merge datasets on unit_id (inner join), print merge statistics (# from left, # from right, # matched, merge rate %)
+  - [x] 1.12 Create markdown cell: "# Missing Data Analysis - Testing: Identify key variables with >20% missing. Create missingness heatmap. Document patterns."
+  - [x] 1.13 Create code cell: Calculate missing percentage for all columns, visualize with heatmap, print top 10 most-missing variables
+  - [x] 1.14 Create code cell: Identify critical variables (affordability gap, earnings, grad rates, key confounders), check their missingness
+  - [x] 1.15 Create markdown cell: "# Data Cleaning - Testing: After listwise deletion, final sample should be 500+ institutions. Verify no missing values in critical columns."
+  - [x] 1.16 Create code cell: Apply listwise deletion for rows missing critical variables, print count before/after, verify completeness
+  - [x] 1.17 Create code cell: Save cleaned merged dataset to `/outputs/data/merged_clean.csv`
+  - [x] 1.18 Create markdown cell: "✅ **Checkpoint**: Final dataset should have 500+ rows, ~150+ columns, no missing values in key variables. Print final shape and sample."
 
-- [ ] 2.0 Feature engineering (Continue in `01_data_preparation.ipynb`)
-  - [ ] 2.1 Create markdown cell: "# Feature Engineering: Treatment Variable - Testing: Quartile 1 (low gap) and Quartile 4 (high gap) should each have ~25% of sample. Verify affordability gap values make sense (positive for most)."
-  - [ ] 2.2 Create code cell: Calculate affordability gap quartiles, create treatment variable (bottom 25% = low gap = 1, top 25% = high gap = 0), print counts and percentages
-  - [ ] 2.3 Create code cell: Display affordability gap distribution by quartile, show mean gap for each quartile
-  - [ ] 2.4 Create markdown cell: "# Outcome Variables - Testing: Earnings should be in reasonable range ($20K-$100K), grad rates 0-100%. Check for missing/suppressed values."
-  - [ ] 2.5 Create code cell: Extract median earnings variables (10-year overall, dependent, independent), print descriptive stats and check for missingness
-  - [ ] 2.6 Create code cell: Extract 6-year bachelor's graduation rate (overall), print descriptive stats, visualize distribution
-  - [ ] 2.7 Create markdown cell: "# Confounders: Selectivity - Testing: Admit rate should be 0-100%, test scores in valid ranges. Document % missing for each."
-  - [ ] 2.8 Create code cell: Extract selectivity variables (admit rate, SAT 25th/75th, ACT 25th/75th), print descriptive stats
-  - [ ] 2.9 Create markdown cell: "# Confounders: Institutional - Testing: Verify sector categories (public/private/for-profit), size categories, state/region coverage"
-  - [ ] 2.10 Create code cell: Extract sector, size category, state, region variables, create dummy variables as needed, print value counts
-  - [ ] 2.11 Create markdown cell: "# Confounders: Demographics - Testing: Percentages should be 0-100%, sum of race percentages should be ~100%. Check for extreme values."
-  - [ ] 2.12 Create code cell: Extract demographic variables (% Pell, % White, % Black, % Latino, % Asian, % women), print descriptive stats
-  - [ ] 2.13 Create markdown cell: "# Confounders: Resources - Testing: Expenditures should be positive, reasonable range ($5K-$50K/student). Endowment may have many zeros."
-  - [ ] 2.14 Create code cell: Extract resource variables (instructional expenditure per student, endowment per student), handle zeros/missing, print stats
-  - [ ] 2.15 Create markdown cell: "# MSI Indicators - Testing: Count institutions by MSI type. Check for overlap (some may be multiple types)."
-  - [ ] 2.16 Create code cell: Extract MSI flags (HBCU, HSI, TCU, AANAPISI, PBI), create binary indicators, print counts for each
-  - [ ] 2.17 Create markdown cell: "# Handling Missing Confounders - Testing: After imputation, verify no remaining missing values. Document imputation methods used."
-  - [ ] 2.18 Create code cell: Impute missing confounders with mean (for continuous) or mode (for categorical), add missingness indicator flags
-  - [ ] 2.19 Create code cell: Save feature-engineered dataset to `/outputs/data/analysis_ready.csv`
-  - [ ] 2.20 Create markdown cell: "✅ **Checkpoint**: Dataset has treatment, outcomes, complete confounders. Treatment groups have 200+ each. Print summary."
+- [x] 2.0 Feature engineering (Continue in `01_data_preparation.ipynb`)
+  - [x] 2.1 Create markdown cell: "# Feature Engineering: Treatment Variable - Testing: Quartile 1 (low gap) and Quartile 4 (high gap) should each have ~25% of sample. Verify affordability gap values make sense (positive for most)."
+  - [x] 2.2 Create code cell: Calculate affordability gap quartiles, create treatment variable (bottom 25% = low gap = 1, top 25% = high gap = 0), print counts and percentages
+  - [x] 2.3 Create code cell: Display affordability gap distribution by quartile, show mean gap for each quartile
+  - [x] 2.4 Create markdown cell: "# Outcome Variables - Testing: Earnings should be in reasonable range ($20K-$100K), grad rates 0-100%. Check for missing/suppressed values."
+  - [x] 2.5 Create code cell: Extract median earnings variables (10-year overall, dependent, independent), print descriptive stats and check for missingness
+  - [x] 2.6 Create code cell: Extract 6-year bachelor's graduation rate (overall), print descriptive stats, visualize distribution
+  - [x] 2.7 Create markdown cell: "# Confounders: Selectivity - Testing: Admit rate should be 0-100%, test scores in valid ranges. Document % missing for each."
+  - [x] 2.8 Create code cell: Extract selectivity variables (admit rate, SAT 25th/75th, ACT 25th/75th), print descriptive stats
+  - [x] 2.9 Create markdown cell: "# Confounders: Institutional - Testing: Verify sector categories (public/private/for-profit), size categories, state/region coverage"
+  - [x] 2.10 Create code cell: Extract sector, size category, state, region variables, create dummy variables as needed, print value counts
+  - [x] 2.11 Create markdown cell: "# Confounders: Demographics - Testing: Percentages should be 0-100%, sum of race percentages should be ~100%. Check for extreme values."
+  - [x] 2.12 Create code cell: Extract demographic variables (% Pell, % White, % Black, % Latino, % Asian, % women), print descriptive stats
+  - [x] 2.13 Create markdown cell: "# Confounders: Resources - Testing: Expenditures should be positive, reasonable range ($5K-$50K/student). Endowment may have many zeros."
+  - [x] 2.14 Create code cell: Extract resource variables (instructional expenditure per student, endowment per student), handle zeros/missing, print stats
+  - [x] 2.15 Create markdown cell: "# MSI Indicators - Testing: Count institutions by MSI type. Check for overlap (some may be multiple types)."
+  - [x] 2.16 Create code cell: Extract MSI flags (HBCU, HSI, TCU, AANAPISI, PBI), create binary indicators, print counts for each
+  - [x] 2.17 Create markdown cell: "# Handling Missing Confounders - Testing: After imputation, verify no remaining missing values. Document imputation methods used."
+  - [x] 2.18 Create code cell: Impute missing confounders with mean (for continuous) or mode (for categorical), add missingness indicator flags
+  - [x] 2.19 Create code cell: Save feature-engineered dataset to `/outputs/data/analysis_ready.csv`
+  - [x] 2.20 Create markdown cell: "✅ **Checkpoint**: Dataset has treatment, outcomes, complete confounders. Treatment groups have 200+ each. Print summary."
 
 - [ ] 3.0 Exploratory data analysis (Notebook: `02_exploratory_analysis.ipynb`)
   - [ ] 3.1 Create markdown cell: "# Exploratory Data Analysis - Load analysis-ready data. Testing: Verify data loads correctly with all engineered features."
