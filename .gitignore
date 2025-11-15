@@ -76,6 +76,7 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+**/.ipynb_checkpoints/
 
 # IPython
 profile_default/
@@ -134,11 +135,12 @@ dmypy.json
 *.hdf5
 *.h5
 
-# Output files
-outputs/
-results/
-figures/
-plots/
+# Output files (uncomment if you want to ignore outputs)
+# outputs/figures/*.png
+# outputs/tables/*.csv
+# outputs/data/*.csv
+outputs/data/merged_clean.csv
+outputs/data/analysis_ready.csv
 
 # Model files
 *.pkl
@@ -178,4 +180,7 @@ logs/
 .env.*.local
 secrets.json
 credentials.json
+
+
+venv
 

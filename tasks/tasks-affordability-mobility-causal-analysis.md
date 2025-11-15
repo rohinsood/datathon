@@ -41,14 +41,14 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Tasks
 
-- [ ] 0.0 Create feature branch and project structure
-  - [ ] 0.1 Create and checkout a new branch (e.g., `git checkout -b analysis/affordability-mobility`)
-  - [ ] 0.2 Create directory structure: `/notebooks/`, `/outputs/`, `/outputs/figures/`, `/outputs/tables/`, `/outputs/data/`
-  - [ ] 0.3 Create `requirements.txt` with dependencies: pandas, numpy, scipy, statsmodels, scikit-learn, dowhy, econml, causalml, matplotlib, seaborn, plotly, shap, jupyter, nbformat, ipykernel
-  - [ ] 0.4 Initialize virtual environment and install dependencies
-  - [ ] 0.5 Create placeholder Jupyter notebooks: `01_data_preparation.ipynb`, `02_exploratory_analysis.ipynb`, `03_causal_inference.ipynb`, `04_equity_analysis.ipynb`, `05_visualizations.ipynb`, `06_final_report.ipynb`
-  - [ ] 0.6 Create `/notebooks/utils.py` for helper functions
-  - [ ] 0.7 Set up `.gitignore` to exclude large data files, outputs, and notebook checkpoints (.ipynb_checkpoints/)
+- [x] 0.0 Create feature branch and project structure
+  - [x] 0.1 Create and checkout a new branch (e.g., `git checkout -b analysis/affordability-mobility`)
+  - [x] 0.2 Create directory structure: `/notebooks/`, `/outputs/`, `/outputs/figures/`, `/outputs/tables/`, `/outputs/data/`
+  - [x] 0.3 Create `requirements.txt` with dependencies: pandas, numpy, scipy, statsmodels, scikit-learn, dowhy, econml, causalml, matplotlib, seaborn, plotly, shap, jupyter, nbformat, ipykernel
+  - [x] 0.4 Initialize virtual environment and install dependencies
+  - [x] 0.5 Create placeholder Jupyter notebooks: `01_data_preparation.ipynb`, `02_exploratory_analysis.ipynb`, `03_causal_inference.ipynb`, `04_equity_analysis.ipynb`, `05_visualizations.ipynb`, `06_final_report.ipynb`
+  - [x] 0.6 Create `/notebooks/utils.py` for helper functions
+  - [x] 0.7 Set up `.gitignore` to exclude large data files, outputs, and notebook checkpoints (.ipynb_checkpoints/)
 
 - [ ] 1.0 Data loading, cleaning, and merge (Notebook: `01_data_preparation.ipynb`)
   - [ ] 1.1 Create markdown cell: "# Data Loading - Testing Directions: Verify both datasets load without errors, check shapes (~21K and ~6K rows), inspect first few rows for data quality"
