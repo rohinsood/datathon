@@ -125,7 +125,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.34 **SAVE ANALYSIS-READY DATA** - Save feature-engineered dataset to `/outputs/data/analysis_ready.csv`, also save variable lists to `/outputs/data/variable_lists.json`
   - [x] 2.35 **FINAL CHECKPOINT:** Print summary: total N, treatment group sizes (both >200?), outcome variable ranges, number of confounders. Document: "Feature engineering complete. Ready for causal analysis."
 
-- [ ] 3.0 Exploratory data analysis (Script: `02_exploratory_analysis.py`)
+- [x] 3.0 Exploratory data analysis (Script: `02_exploratory_analysis.py`)
   - [ ] 3.1 **LOAD ANALYSIS-READY DATA** - Write code to load `/outputs/data/analysis_ready.csv` and variable lists
   - [ ] 3.2 **RUN & ANALYZE:** Execute load, print shape and verify all engineered features present
   - [ ] 3.3 **STOP AND THINK:** Does data look correct? Any unexpected changes from saved file? Verify treatment/outcome/confounder variables all present.
