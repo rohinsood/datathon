@@ -1,0 +1,3 @@
+Outcome,Outcome_Variable,Method,ATE,ATE_Formatted,SE,SE_Formatted,CI_Lower,CI_Upper,CI_Formatted,P_Value,Significant,N_Total,Refutation_Random_Common_Cause_Passed,Refutation_Placebo_Passed,Refutation_Subset_Passed
+Earnings (10-year),earnings_10yr,DoWhy (Propensity Score Weighting),-2484.2665950705996,"$-2,484.27",715.0073434683969,$715.01,-3874.211052920684,-1071.382266524568,"[$-3,874.21, $-1,071.38]",0.0005118768580196775,Yes,4067,No/Unknown,No/Unknown,Yes
+Graduation Rate (6-year),grad_rate_6yr,DoWhy (Propensity Score Weighting),-1.905080521445953,-1.91 pp,1.322441070603464,1.32 pp,-4.403340095116803,0.7806289016487753,"[-4.40, 0.78] pp",0.14970372374402996,No,3485,No/Unknown,No/Unknown,Yes

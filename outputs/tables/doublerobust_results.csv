@@ -1,0 +1,3 @@
+Outcome,Outcome_Variable,Method,ATE,ATE_Formatted,SE,SE_Formatted,CI_Lower,CI_Upper,CI_Formatted,P_Value,Significant,N_Total
+Earnings (10-year),earnings_10yr,Doubly Robust (LinearDML),335.9578570527939,$335.96,101.77022371419852,$101.77,113.3357062504175,522.049518908687,"[$113.34, $522.05]",0.004,Yes,4067
+Graduation Rate (6-year),grad_rate_6yr,Doubly Robust (LinearDML),0.5317521261567125,0.53 pp,0.14349901654138408,0.14 pp,0.2867280730632885,0.8409721300407871,"[0.29, 0.84] pp",0.002,Yes,3485

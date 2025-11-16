@@ -1,0 +1,3 @@
+Outcome,Outcome_Variable,Method,ATE,ATE_Formatted,SE,SE_Formatted,CI_Lower,CI_Upper,CI_Formatted,P_Value,Significant,N_Treated,N_Control,N_Total,Mean_Treated,Mean_Control
+Earnings (10-year),earnings_10yr,IPW (Inverse Probability Weighting),-1750.807245809323,"$-1,750.81",734.2887514763953,$734.29,-3255.525276001927,-402.68342233674485,"[$-3,255.53, $-402.68]",0.014,Yes,947,3120,4067,44071.837875430916,45822.64512124024
+Graduation Rate (6-year),grad_rate_6yr,IPW (Inverse Probability Weighting),-2.001036332579133,-2.00 pp,1.3722215755768894,1.37 pp,-4.726188388440808,0.663580665629111,"[-4.73, 0.66] pp",0.142,No,565,2920,3485,50.446492669377136,52.44752900195627
