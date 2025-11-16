@@ -230,3 +230,1725 @@
 ---
 
 
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr: r = -0.079
+- treatment ↔ grad_rate_6yr: r = -0.094
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr: r = -0.079
+- treatment ↔ grad_rate_6yr: r = -0.094
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr: r = -0.079
+- treatment ↔ grad_rate_6yr: r = -0.094
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr: r = -0.079
+- treatment ↔ grad_rate_6yr: r = -0.094
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr: r = -0.079
+- treatment ↔ grad_rate_6yr: r = -0.094
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr:
+  - Complete cases (n=3,395): r = -0.079
+  - Pairwise (n=5,013): r = -0.171
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $38,865 vs $47,153
+    - Higher treatment rate: 39.4% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+- treatment ↔ grad_rate_6yr:
+  - Complete cases (n=3,395): r = -0.094
+  - Pairwise (n=4,362): r = -0.185
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $36 vs $53
+    - Higher treatment rate: 32.7% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr:
+  - Complete cases (n=3,395): r = -0.079
+  - Pairwise (n=5,013): r = -0.171
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $38,865 vs $47,153
+    - Higher treatment rate: 39.4% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+- treatment ↔ grad_rate_6yr:
+  - Complete cases (n=3,395): r = -0.094
+  - Pairwise (n=4,362): r = -0.185
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $36 vs $53
+    - Higher treatment rate: 32.7% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr:
+  - Complete cases (n=3,395): r = -0.079
+  - Pairwise (n=5,013): r = -0.171
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $38,865 vs $47,153
+    - Higher treatment rate: 39.4% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+- treatment ↔ grad_rate_6yr:
+  - Complete cases (n=3,395): r = -0.094
+  - Pairwise (n=4,362): r = -0.185
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $36 vs $53
+    - Higher treatment rate: 32.7% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
+
+
+## Task 3.0: Exploratory Data Analysis
+
+### Data Loading and Verification (Tasks 3.1-3.3) ✓
+
+**Data Load Status:**
+- Analysis-ready dataset loaded: 5,345 rows × 315 columns
+- Variable lists loaded successfully from JSON
+
+**Data Integrity Assessment:**
+- ✅ Sample size matches expected: 5,345 institutions
+- ✅ All key variables present in dataset
+- ✅ Treatment variable 'treatment' verified
+- ✅ Outcome variables verified: earnings_10yr, grad_rate_6yr
+- ✅ All 19 confounders present
+- ✅ All 5 categorical variables present
+
+**Treatment Group Distribution:**
+- High Gap (Control): 4,008 (75.0%)
+- Low Gap (Treated): 1,337 (25.0%)
+
+**Outcome Variables Status:**
+- earnings_10yr: 5,013 valid values (93.8% complete)
+- grad_rate_6yr: 4,362 valid values (81.6% complete)
+
+**Assessment:**
+- Data looks correct with no unexpected changes from saved file
+- All engineered features from Task 2.0 are present
+- Sample size adequate for analysis (exceeds 500+ requirement)
+- Treatment groups have adequate sample sizes (both >200)
+- Ready to proceed with descriptive statistics
+
+---
+
+
+### Descriptive Statistics by Treatment Group (Tasks 3.4-3.7) ✓
+
+**Key Findings - Unadjusted Outcome Differences:**
+- **Earnings (10-year)**: Low gap institutions have $5,282 LOWER earnings than high gap institutions (11.6% lower)
+  - Low Gap mean: $40,437
+  - High Gap mean: $45,719
+  - t-test: p < 0.001 (highly significant)
+
+- **Graduation Rate (6-year)**: Low gap institutions have 10.4 percentage points LOWER graduation rates
+  - Low Gap mean: 40.8%
+  - High Gap mean: 51.2%
+  - t-test: p < 0.001 (highly significant)
+
+**Confounder Differences (Justifying Causal Methods):**
+- Low gap institutions serve more Pell-eligible students (+3.7 percentage points)
+- Low gap institutions have higher % URM students (+2.2 percentage points)
+- Low gap institutions have lower instructional expenditure per student
+
+**Interpretation:**
+- The unadjusted differences show that low gap institutions have WORSE outcomes, which is counterintuitive
+- This suggests strong confounding: low gap institutions serve more disadvantaged students and have fewer resources
+- These confounder differences justify using propensity score methods to control for selection bias
+- The causal effect (after controlling for confounders) may differ from the unadjusted difference
+
+**Files Saved:**
+- `outputs/tables/descriptive_stats.csv` - Full descriptive statistics table
+
+---
+
+
+### Correlation Analysis (Tasks 3.8-3.10) ✓
+
+**Correlation Matrix:**
+- Analyzed 22 continuous variables
+- Based on 3,395 complete observations
+
+**Multicollinearity Assessment:**
+- Found 7 highly correlated confounder pairs (|r| > 0.7)
+- **Key multicollinear pairs:**
+  - pct_white_imputed ↔ pct_urm: r = -0.820
+  - pct_white_imputed ↔ is_msi: r = -0.727
+  - pct_black_imputed ↔ pct_urm: r = 0.759
+  - pct_black_imputed ↔ is_hbcu: r = 0.832
+  - pct_latino_imputed ↔ is_hsi: r = 0.750
+- **Decision:** Monitor in regression models; consider VIF checks or regularization
+
+**Treatment-Outcome Correlations:**
+- treatment ↔ earnings_10yr:
+  - Complete cases (n=3,395): r = -0.079
+  - Pairwise (n=5,013): r = -0.171
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $38,865 vs $47,153
+    - Higher treatment rate: 39.4% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+- treatment ↔ grad_rate_6yr:
+  - Complete cases (n=3,395): r = -0.094
+  - Pairwise (n=4,362): r = -0.185
+  - ⚠️  **Important:** Correlation differs significantly between methods
+    This indicates missing data may not be random (MNAR)
+    Observations excluded from complete cases have:
+    - Lower mean earnings: $36 vs $53
+    - Higher treatment rate: 32.7% vs 15.9%
+    - **Limitation:** Complete cases correlation may be biased
+
+**Treatment-Confounder Correlations (Top 3):**
+- pct_latino_imputed: r = 0.221
+  → Strong correlation - critical confounder to control for
+- is_msi: r = 0.217
+  → Strong correlation - critical confounder to control for
+- log_endowment: r = -0.182
+
+**Files Saved:**
+- `outputs/tables/correlation_matrix.csv` - Full correlation matrix
+- `outputs/figures/correlation_heatmap.png` - Visualization
+- `outputs/tables/high_correlation_pairs.csv` - Highly correlated pairs
+
+---
+
+
+### Outcome Distribution Analysis (Tasks 3.11-3.13) ✓
+
+**Distribution Characteristics:**
+
+**Earnings (10-year) (earnings_10yr):**
+- Skewness: 1.357
+- Outliers (>3 SD): 81 (1.62%)
+- ⚠️  **Decision:** High skewness - consider log transformation
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- Skewness: -0.060
+- Outliers (>3 SD): 0 (0.00%)
+- ✅ **Decision:** Distribution acceptable for analysis without transformation
+
+**Files Saved:**
+- `outputs/figures/earnings_10yr_distribution.png` - Earnings histogram with KDE
+- `outputs/figures/grad_rate_6yr_distribution.png` - Graduation rate histogram with KDE
+- `outputs/figures/earnings_10yr_boxplot_by_treatment.png` - Earnings box plot by treatment
+- `outputs/figures/grad_rate_6yr_boxplot_by_treatment.png` - Graduation rate box plot by treatment
+
+---
+
+
+### Outlier Detection and Handling (Tasks 3.14-3.17) ✓
+
+**Outlier Detection Results:**
+
+**Earnings (10-year) (earnings_10yr):**
+- IQR method: 217 outliers (4.33%)
+- Z-score method: 81 outliers (1.62%)
+
+**Graduation Rate (6-year) (grad_rate_6yr):**
+- IQR method: 0 outliers (0.00%)
+- Z-score method: 0 outliers (0.00%)
+
+**Outlier Handling Decisions:**
+
+**Earnings (10-year):**
+- Decision: monitor
+- Reason: Moderate outliers (4.33%) - monitor in analysis, consider winsorizing
+- Applied: monitor
+
+**Graduation Rate (6-year):**
+- Decision: no_action
+- Reason: Very few outliers (0.00%) - no action needed
+- Applied: no_action
+
+**Impact:**
+- Sample size preserved (winsorizing adjusts values rather than removing observations)
+- Original data maintained in `analysis_ready.csv`
+
+---
+
+
+### Treatment Group Balance Check - Pre-Matching (Tasks 3.18-3.22) ✓
+
+**Balance Assessment:**
+- Analyzed 19 confounders for balance between treatment groups
+- Used standardized mean difference (SMD) with threshold |SMD| > 0.1 for imbalance
+
+**Pre-Matching Balance Results:**
+- Imbalanced confounders: 14 of 19 (73.7%)
+- Mean |SMD|: 0.266
+- Median |SMD|: 0.249
+- Maximum |SMD|: 0.678
+
+**Most Imbalanced Confounders (Top 5):**
+- log_endowment: SMD = -0.678
+- is_msi: SMD = +0.557
+- is_hsi: SMD = +0.503
+- sat_missing: SMD = +0.488
+- pct_latino_imputed: SMD = +0.454
+
+**Interpretation:**
+- Pre-matching imbalance is EXPECTED and justifies using causal inference methods
+- 14 confounders need to be balanced via propensity score methods
+- This imbalance indicates systematic differences between low gap and high gap institutions
+- Propensity score matching/weighting should address this in Task 4.0
+
+**Final EDA Checkpoint:**
+- Sample size: 5,345 institutions
+- Treatment groups: Both have adequate sample sizes (≥200)
+- Outcomes: Both outcomes have >80% complete data
+- Confounders: 19 continuous + 5 categorical
+- Pre-matching imbalance: 14/19 confounders imbalanced
+- **Status: ✅ Ready to proceed to causal inference (Task 4.0)**
+
+**Files Saved:**
+- `outputs/tables/balance_pre_matching.csv` - Full balance table with SMDs
+
+---
