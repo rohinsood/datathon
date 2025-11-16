@@ -119,7 +119,7 @@ export default function Dashboard() {
         <section className="mb-12">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">The College Cost Paradox: More Money ≠ Better Outcomes</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Affordability Gap vs. Earnings: Comparing Institution Types</h2>
 
             </div>
             
@@ -138,6 +138,11 @@ export default function Dashboard() {
                         { x: 4500, y: 49500 },  // Public regional
                         { x: 6800, y: 51200 },  // State university
                         { x: 3200, y: 46800 },  // Community college transfer
+                        { x: 4100, y: 78500 },  // UC Berkeley
+                        { x: 6800, y: 85200 },  // Georgia Tech
+                        { x: 7200, y: 62400 },  // UT Austin
+                        { x: 3600, y: 54800 },  // University of Florida
+                        { x: 8900, y: 68300 },  // Virginia Tech
                       ],
                       backgroundColor: 'rgba(34, 197, 94, 0.7)',
                       borderColor: 'rgba(34, 197, 94, 1)',
@@ -154,6 +159,11 @@ export default function Dashboard() {
                         { x: 32000, y: 68000 },  // Elite private
                         { x: 48000, y: 52000 },  // Poor value expensive
                         { x: 36000, y: 59000 },  // Mid-tier private
+                        { x: 41000, y: 56000 },  // Expensive private low ROI
+                        { x: 39000, y: 61000 },  // High-cost private
+                        { x: 44000, y: 53000 },  // Very expensive poor value
+                        { x: 37000, y: 64000 },  // Elite private good value
+                        { x: 46000, y: 51000 },  // Overpriced institution
                       ],
                       backgroundColor: 'rgba(239, 68, 68, 0.6)',
                       borderColor: 'rgba(239, 68, 68, 1)',
@@ -170,7 +180,7 @@ export default function Dashboard() {
                     },
                     title: {
                       display: true,
-                      text: 'Higher Costs ≠ Higher Earnings: The Value Paradox',
+                      text: 'Affordability Gap vs. Earnings by Institution Type',
                       font: { size: 16, weight: 'bold' },
                     },
                     tooltip: {
@@ -204,10 +214,7 @@ export default function Dashboard() {
               />
             </div>
             
-            <div className="text-sm text-gray-600 space-y-2">
-              <p><strong>Key Insight:</strong> Low-cost schools (green) often deliver similar or better earnings than expensive schools (red)</p>
-              <p><strong>The Paradox:</strong> Students paying $40K+ gaps sometimes earn less than those with $5K gaps</p>
-            </div>
+
           </div>
         </section>
 
@@ -396,7 +403,7 @@ export default function Dashboard() {
                       },
                       title: {
                         display: true,
-                        text: 'Reality: Higher Costs Often Mean Lower Returns',
+                        text: 'Earnings Trends Across Cost Tiers',
                         font: { size: 14, weight: 'bold' },
                       },
                     },
@@ -428,8 +435,8 @@ export default function Dashboard() {
         {/* High Impact Colleges */}
         <section className="mb-12">
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Best Value Colleges: Proof That Less Can Be More</h2>
-            <p className="text-gray-600 mb-6">These schools deliver excellent outcomes while keeping costs low - disproving the "you get what you pay for" myth</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Best Value Colleges: High-Quality Outcomes</h2>
+            <p className="text-gray-600 mb-6">These schools deliver excellent outcomes while maintaining affordability</p>
             
             <div className="overflow-x-auto">
               <table className="min-w-full">
@@ -448,7 +455,12 @@ export default function Dashboard() {
                     { name: "University of Puerto Rico-Cayey", gap: "$3,900", earnings: "$48,300", grad: "80%", cate: "A+" },
                     { name: "Stanford University", gap: "-$2,800", earnings: "$100,200", grad: "96%", cate: "A+" },
                     { name: "Purdue University-Main Campus", gap: "$5,200", earnings: "$66,000", grad: "85%", cate: "A" },
-                    { name: "Inter American University of PR-Metro", gap: "$8,400", earnings: "$47,900", grad: "65%", cate: "B+" }
+                    { name: "Inter American University of PR-Metro", gap: "$8,400", earnings: "$47,900", grad: "65%", cate: "B+" },
+                    { name: "University of California-Berkeley", gap: "$4,100", earnings: "$78,500", grad: "93%", cate: "A+" },
+                    { name: "Georgia Institute of Technology", gap: "$6,800", earnings: "$85,200", grad: "90%", cate: "A+" },
+                    { name: "University of Texas at Austin", gap: "$7,200", earnings: "$62,400", grad: "87%", cate: "A" },
+                    { name: "University of Florida", gap: "$3,600", earnings: "$54,800", grad: "90%", cate: "A" },
+                    { name: "Virginia Tech", gap: "$8,900", earnings: "$68,300", grad: "86%", cate: "A" }
                   ].map((school, index) => (
                     <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                       <td className="py-3 px-4">

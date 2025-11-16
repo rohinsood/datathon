@@ -2,13 +2,13 @@
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="bg-slate-800 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-white">College Mobility Explorer</h1>
+              <h1 className="text-2xl font-bold text-white">🔍 College Mobility Explorer</h1>
               <p className="text-slate-300 mt-1">Understanding the true impact of college affordability on economic mobility</p>
             </div>
             <div className="flex space-x-4">
@@ -37,18 +37,31 @@ export default function Page() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
-        <section className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Does College Affordability Really Drive Economic Mobility?
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We're building the first comprehensive platform to understand the causal relationship between college costs, student outcomes, and long-term economic mobility.
-          </p>
+        <section className="text-center mb-16 py-12">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-12">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-slate-800 to-blue-800 bg-clip-text text-transparent mb-8">
+              Does College Affordability Really Drive Economic Mobility?
+            </h1>
+            <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+              We're building the first comprehensive platform to understand the causal relationship between college costs, student outcomes, and long-term economic mobility.
+            </p>
+            <div className="mt-8 flex justify-center space-x-4">
+              <a href="/welcome" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                🚀 Get Started
+              </a>
+              <button 
+                onClick={() => document.getElementById('problem-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-white text-slate-700 px-8 py-4 rounded-xl font-semibold border-2 border-slate-200 hover:border-slate-300 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                📊 Learn More
+              </button>
+            </div>
+          </div>
         </section>
 
         {/* Problem Section */}
-        <section className="mb-16">
-          <div className="bg-red-50 border border-red-100 rounded-lg p-8">
+        <section id="problem-section" className="mb-16">
+          <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-100 rounded-2xl p-10 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">The Problem</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
@@ -79,14 +92,14 @@ export default function Page() {
 
         {/* Solution Section */}
         <section id="solution-section" className="mb-16">
-          <div className="bg-slate-100 border border-slate-200 rounded-lg p-8">
+          <div className="bg-gradient-to-r from-slate-100 to-blue-100 border border-slate-200 rounded-2xl p-10 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Solution</h2>
             <p className="text-lg text-gray-700 mb-8">
               The College Mobility Explorer combines College Scorecard data with advanced causal inference methods to provide unprecedented insights into educational value and equity.
             </p>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg p-6 shadow hover:scale-105 transition-transform duration-200 cursor-pointer">
+              <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer border border-gray-100">
                 <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
