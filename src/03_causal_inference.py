@@ -1,23 +1,19 @@
+# src/03_causal_inference.py
 """
 Causal Inference Script: Affordability Gap and Economic Mobility Analysis
 This script implements multiple causal inference methods (IPW, DR, DoWhy, OLS) to estimate
 the causal effect of affordability gaps on student outcomes.
 """
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import json
+from pathlib import Path
 import warnings
-warnings.filterwarnings('ignore')
-
-# Causal inference libraries
+import textwrap
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-import statsmodels.api as sm
-from statsmodels.stats.weightstats import DescrStatsW
-from scipy import stats
-from scipy.stats import bootstrap
+from sklearn.exceptions import ConvergenceWarning
 
 # DoWhy for causal graph and refutation
 try:
@@ -37,82 +33,177 @@ except ImportError:
     print("WARNING: EconML not available. Install with: pip install econml")
     ECONML_AVAILABLE = False
 
-# Set display options
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
-pd.set_option('display.max_colwidth', 50)
+# --- Configuration ---
+DATA_PATH = Path("outputs/data/analysis_ready.csv")
+VARLIST_PATH = Path("outputs/data/variable_lists.json")
+LOG_PATH = Path("outputs/logs/analysis_log.md")
+FIG_PATH = Path("outputs/figures")
+FIG_PATH.mkdir(parents=True, exist_ok=True)
+LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 
+# Only silence the sklearn convergence warning if we handle it explicitly later
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+# --- Helpers ---
+def safe_load_var(v):
+    """If v is a list with one element, return the element; if list, return list; if string return string."""
+    if isinstance(v, list) and len(v) == 1:
+        return v[0]
+    return v
+
+def ensure_list(x):
+    if x is None:
+        return []
+    if isinstance(x, str):
+        return [x]
+    return list(x)
+
+def append_log(text):
+    with open(LOG_PATH, "a") as f:
+        f.write(text + "\n\n")
+
+def print_and_log(text):
+    print(text)
+    append_log(text)
+
+# --- 4.1 Setup: load data & variables ---
 print("="*80)
-print("TASK 4.0: IMPLEMENT CORE CAUSAL INFERENCE METHODS")
+print("4.1 SETUP: Loading data & variable lists")
 print("="*80)
 
-# ============================================================================
-# SECTION 4.1: SETUP CAUSAL ANALYSIS
-# ============================================================================
-print("\n" + "="*80)
-print("SECTION 4.1: SETUP CAUSAL ANALYSIS")
-print("="*80)
-
-# Load analysis-ready dataset
-print("\nLoading analysis-ready dataset...")
-df = pd.read_csv('outputs/data/analysis_ready.csv')
+# Load data
+if not DATA_PATH.exists():
+    raise FileNotFoundError(f"Data file not found: {DATA_PATH}")
+df = pd.read_csv(DATA_PATH)
 
 # Load variable lists
-print("Loading variable lists...")
-with open('outputs/data/variable_lists.json', 'r') as f:
+if not VARLIST_PATH.exists():
+    raise FileNotFoundError(f"Variable lists not found: {VARLIST_PATH}")
+with open(VARLIST_PATH, "r") as f:
     variable_lists = json.load(f)
 
-# Extract variable lists
-treatment_var = variable_lists['treatment']
-outcome_vars = variable_lists['outcomes']
-confounder_vars = variable_lists['confounders']
-categorical_vars = variable_lists['categorical']
+# Normalize variable list entries (accept single string or list)
+treatment_var = safe_load_var(variable_lists.get("treatment"))
+outcome_vars = ensure_list(variable_lists.get("outcomes"))
+confounder_vars = ensure_list(variable_lists.get("confounders"))
+categorical_vars = ensure_list(variable_lists.get("categorical"))
 
+# If user provided treatment as a list of length 1, convert to string
+if isinstance(treatment_var, list) and len(treatment_var) == 1:
+    treatment_var = treatment_var[0]
+
+# Validate that treatment_var is a single string
+if isinstance(treatment_var, list):
+    raise ValueError("treatment in variable_lists.json must be a single variable name (string).")
+
+print_and_log(f"Loaded data shape: {df.shape}")
+print_and_log(f"treatment_var: {treatment_var}")
+print_and_log(f"outcome_vars: {outcome_vars}")
+print_and_log(f"n confounders (declared): {len(confounder_vars)}")
+print_and_log(f"categorical_vars: {categorical_vars}")
+
+# Verify variables exist in df (and warn if present but all-NaN)
+missing = []
+all_vars_to_check = [treatment_var] + outcome_vars + confounder_vars + categorical_vars
+for v in all_vars_to_check:
+    if v not in df.columns:
+        missing.append(v)
+if missing:
+    raise KeyError(f"The following required variables are missing from the dataset: {missing}")
+
+# Check for all-NaN columns (report, but do not stop)
+all_nan = [c for c in all_vars_to_check if df[c].isna().all()]
+if all_nan:
+    print_and_log(f"WARNING: The following variables exist but are all NaN: {all_nan}")
+
+# Print quick sample
+print(df[[treatment_var] + (outcome_vars[:2] if len(outcome_vars)>1 else outcome_vars)].head().to_string())
+append_log(f"Sample head printed above.")
+
+# --- 4.3 STOP & THINK: DAG checks (basic automated checks) ---
 print("\n" + "="*80)
-print("VARIABLE DEFINITIONS")
+print("4.3 DAG CHECKS: Keyword coverage and critical confounder presence")
 print("="*80)
-print(f"\nTreatment Variable: {treatment_var}")
-print(f"\nOutcome Variables: {outcome_vars}")
-print(f"\nNumber of Confounders: {len(confounder_vars)}")
-print(f"Confounders: {confounder_vars}")
-print(f"\nCategorical Variables: {categorical_vars}")
 
-# Verify all variables exist in dataset
+expected_confounder_keywords = {
+    'Selectivity': ['admit', 'sat', 'act', 'test'],
+    'Demographics': ['pell', 'urm', 'white', 'black', 'latino', 'asian', 'women', 'gender'],
+    'Resources': ['instructional', 'endowment', 'expenditur', 'spend'],
+    'Institutional': ['sector', 'size', 'msi', 'hbcu', 'hsi', 'tcu', 'carnegie'],
+    'Geography': ['state', 'region', 'urban']
+}
+confounder_lower = [c.lower() for c in confounder_vars + categorical_vars]
+coverage = {}
+for cat, keys in expected_confounder_keywords.items():
+    found = [c for c in (confounder_vars + categorical_vars) if any(k in c.lower() for k in keys)]
+    coverage[cat] = found
+    print_and_log(f"{cat}: {len(found)} matched variables -> {found[:8]}")
+
+# Document automatic check
+append_log("Automated confounder keyword coverage:\n" + json.dumps(coverage, indent=2))
+
+# --- 4.4 Propensity score prep ---
 print("\n" + "="*80)
-print("VERIFYING VARIABLES IN DATASET")
+print("4.4 PREP: Build covariate matrix for propensity model")
 print("="*80)
 
-missing_vars = []
-for var in [treatment_var] + outcome_vars + confounder_vars:
-    if var not in df.columns:
-        missing_vars.append(var)
-        print(f"  WARNING: {var} not found in dataset!")
+# 1) Ensure treatment is numeric and binary 0/1
+# Accept common encodings: 0/1, True/False, 'low'/'high', 'Low'/'High'
+def coerce_treatment_to_binary(series, positive_values=None):
+    s = series.copy()
+    # If already numeric and only 0/1, keep
+    if pd.api.types.is_numeric_dtype(s):
+        unique = pd.Series(s.dropna().unique())
+        if set(unique.astype(int).tolist()) <= {0,1}:
+            return s.astype(float)
+    # If boolean
+    if pd.api.types.is_bool_dtype(s):
+        return s.astype(float)
+    # If positive_values provided map them to 1 else try to infer (bottom quartile -> 1 etc.)
+    if positive_values:
+        return s.map(lambda x: 1.0 if x in positive_values else 0.0)
+    # Last resort: if contains only two unique strings, map the lexicographically smaller to 0
+    uniques = s.dropna().unique()
+    if len(uniques) == 2:
+        mapping = {uniques[0]: 0.0, uniques[1]: 1.0}
+        return s.map(mapping).astype(float)
+    # If numeric continuous, user probably mis-specified treatment
+    raise ValueError("Unable to coerce treatment to binary 0/1 automatically. "
+                     "Please specify mapping or ensure treatment_var is binary.")
 
-missing_categorical = []
-for var in categorical_vars:
-    if var not in df.columns:
-        missing_categorical.append(var)
-        print(f"  WARNING: {var} not found in dataset!")
+# Try to coerce
+try:
+    df[treatment_var] = coerce_treatment_to_binary(df[treatment_var])
+except ValueError as e:
+    raise RuntimeError(f"Treatment coercion failed: {e}")
 
-if missing_vars or missing_categorical:
-    print(f"\nERROR: {len(missing_vars)} variables missing from dataset!")
-    print("Please check variable_lists.json and ensure all variables were created in feature engineering.")
+# Check variation
+tcnts = df[treatment_var].value_counts(dropna=False)
+print_and_log(f"Treatment value counts (post-coercion):\n{tcnts.to_string()}")
+if set(tcnts.index.dropna()) <= {0.0} or set(tcnts.index.dropna()) <= {1.0}:
+    raise RuntimeError("Treatment has no variation (all 0 or all 1) after coercion; cannot estimate effect.")
+
+# 2) Build X_continuous excluding categorical_vars (avoid duplication)
+confounders_continuous = [c for c in confounder_vars if c not in categorical_vars]
+X_cont = df[confounders_continuous].copy()
+# Make numeric, coerce errors -> NaN (we will track missingness)
+for c in X_cont.columns:
+    X_cont[c] = pd.to_numeric(X_cont[c], errors="coerce")
+
+# 3) One-hot encode categorical_vars (if any)
+if categorical_vars:
+    X_cat = pd.get_dummies(df[categorical_vars].astype(str), drop_first=True)
 else:
-    print("\n✓ All variables found in dataset!")
+    X_cat = pd.DataFrame(index=df.index)
 
-# Print dataset summary
-print("\n" + "="*80)
-print("DATASET SUMMARY")
-print("="*80)
-print(f"\nDataset Shape: {df.shape}")
-print(f"Number of observations: {df.shape[0]:,}")
-print(f"Number of variables: {df.shape[1]}")
+# 4) Concatenate and keep track of rows with missing or infinite values
+X_all = pd.concat([X_cont, X_cat], axis=1)
 
-# Check treatment group sizes
-print(f"\nTreatment Group Distribution:")
-print(df[treatment_var].value_counts().sort_index())
-print(f"\nTreatment Group Percentages:")
-print(df[treatment_var].value_counts(normalize=True).sort_index() * 100)
+n_before = len(X_all)
+missing_per_col = X_all.isna().mean().sort_values(ascending=False)
+n_rows_with_missing = X_all.isna().any(axis=1).sum()
+print_and_log(f"Rows before cleaning: {n_before}; rows with any missing confounder: {n_rows_with_missing}")
+print_and_log("Top missing confounder rates:\n" + missing_per_col.head(10).to_string())
 
 # Check for missing values in key variables
 print(f"\nMissing Values Check:")
@@ -124,9 +215,7 @@ print("\n" + "="*80)
 print("SETUP COMPLETE - READY FOR CAUSAL ANALYSIS")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.4: PROPENSITY SCORE MODEL
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.4: PROPENSITY SCORE MODEL")
 print("="*80)
@@ -219,39 +308,86 @@ if missing_in_X > 0 or inf_in_X > 0:
     else:
         inf_mask = pd.Series([False] * len(X_all))
     valid_mask = ~(missing_mask | inf_mask)
+    removed = n_before - valid_mask.sum()
+    df = df[valid_mask].reset_index(drop=True)
     X_all = X_all[valid_mask].reset_index(drop=True)
-    treatment = treatment[valid_mask]
-    df_psm = df_psm[valid_mask].reset_index(drop=True)
-    print(f"Remaining observations: {len(X_all):,}")
+    print_and_log(f"Dropped {removed} rows due to missing confounders ({removed/n_before:.1%})")
+
+# Check infinite values
+is_inf = np.isinf(X_all.select_dtypes(include=[np.number])).any(axis=1).sum()
+if is_inf > 0:
+    df = df[~np.isinf(X_all.select_dtypes(include=[np.number])).any(axis=1)].reset_index(drop=True)
+    X_all = X_all[~np.isinf(X_all.select_dtypes(include=[np.number])).any(axis=1)].reset_index(drop=True)
+    print_and_log(f"Removed {is_inf} rows due to infinite numeric values")
+
+# Recompute sample size
+n_after = len(X_all)
+print_and_log(f"Final sample used for propensity estimation: {n_after}")
+
+# 5) Scale continuous features (improves solver behavior)
+scaler = StandardScaler()
+if not X_cont.empty:
+    X_cont_scaled = pd.DataFrame(scaler.fit_transform(X_cont), columns=X_cont.columns, index=X_cont.index)
 else:
-    print("\n✓ No missing or infinite values in confounders")
+    X_cont_scaled = pd.DataFrame(index=X_all.index)
 
-# Convert to numpy array for statsmodels (ensure float64)
-X_all = X_all.astype(float)
+# Rebuild X_all as scaled continuous + dummies
+X_all = pd.concat([X_cont_scaled, X_cat.reset_index(drop=True)], axis=1).astype(float)
 
-# Fit logistic regression model for propensity scores
+# --- 4.5 Fit propensity model (regularized sklearn logistic) ---
 print("\n" + "="*80)
-print("FITTING PROPENSITY SCORE MODEL")
+print("4.5 FIT PROPENSITY MODEL (regularized sklearn LogisticRegression)")
 print("="*80)
-print("\nModel specification: Treatment ~ All Confounders")
-print(f"Sample size: {len(treatment):,}")
-print(f"Number of features: {X_all.shape[1]}")
 
-# Fit logistic regression using statsmodels for detailed output
-X_with_const = sm.add_constant(X_all)
-psm_model = sm.Logit(treatment, X_with_const)
-psm_result = psm_model.fit(method='bfgs', maxiter=1000, disp=0)
+y = df[treatment_var].astype(int).values
+X = X_all.values
 
+# If too many features relative to N, prefer strong regularization
+C_val = 1.0  # inverse regularization strength; tune if needed
+solver = "saga" if X.shape[1] > 0 else "liblinear"  # saga supports l1/l2 and multinomial
+
+# Track which model was used
+model_type = None
+clf = None
+sm_res = None
+
+try:
+    clf = LogisticRegression(penalty="l2", C=C_val, solver=solver, max_iter=5000, n_jobs=-1)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("always", category=ConvergenceWarning)
+        clf.fit(X, y)
+    propensity_scores = clf.predict_proba(X)[:, 1]
+    df["propensity_score"] = propensity_scores
+    model_type = "sklearn"
+    print_and_log("sklearn LogisticRegression fitted successfully.")
+except Exception as e:
+    # Fallback: try statsmodels Logit (less regularized)
+    print_and_log(f"sklearn LogisticRegression failed: {e}. Attempting statsmodels Logit as fallback.")
+    import statsmodels.api as sm
+    X_sm = sm.add_constant(X_all)
+    try:
+        sm_logit = sm.Logit(y, X_sm)
+        sm_res = sm_logit.fit(disp=False, maxiter=200)
+        propensity_scores = sm_res.predict(X_sm)
+        df["propensity_score"] = propensity_scores
+        model_type = "statsmodels"
+        print_and_log("statsmodels Logit fitted successfully (fallback).")
+    except Exception as e2:
+        raise RuntimeError(f"Both sklearn and statsmodels logistic fits failed: {e2}")
+
+# --- 4.6 Diagnostics: propensity distribution & model checks ---
 print("\n" + "="*80)
-print("PROPENSITY SCORE MODEL SUMMARY")
+print("4.6 DIAGNOSTICS: Propensity stats and model checks")
 print("="*80)
-print(psm_result.summary())
 
-# Generate predicted propensity scores
-propensity_scores = psm_result.predict(X_with_const)
+ps = df["propensity_score"]
+psq = np.quantile(ps, [0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99])
+print_and_log(f"Propensity quantiles (1%,5%,25%,50%,75%,95%,99%): {psq}")
 
-# Add propensity scores to dataframe
-df_psm['propensity_score'] = propensity_scores
+# Check extremes
+ext_low = (ps < 0.01).sum()
+ext_high = (ps > 0.99).sum()
+print_and_log(f"Extreme propensity counts: <0.01: {ext_low}, >0.99: {ext_high}")
 
 print("\n" + "="*80)
 print("PROPENSITY SCORE DISTRIBUTION")
@@ -277,15 +413,24 @@ if extreme_low > 0 or extreme_high > 0:
     print("\nWARNING: Extreme propensity scores detected. May indicate poor overlap.")
     print("Consider trimming sample to common support region.")
 else:
-    print("\n✓ No extreme propensity scores detected. Good overlap expected.")
+    print_and_log("Coefficient summary not available (model type unknown).")
 
+# Save brief diagnostics
+diag_text = textwrap.dedent(f"""
+Propensity diagnostics:
+ - Sample size: {n_after}
+ - n_features: {X_all.shape[1]}
+ - Propensity quantiles (1/5/25/50/75/95/99): {psq.tolist()}
+ - Extreme tail counts (<0.01 / >0.99): {ext_low} / {ext_high}
+""")
+append_log(diag_text)
+
+# --- 4.7 Visualization: hist + box + overlap lines computed from data ---
 print("\n" + "="*80)
-print("PROPENSITY SCORE MODEL COMPLETE")
+print("4.7 VISUALIZATION: Propensity distributions and overlap")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.7-4.8: VISUALIZE PROPENSITY SCORES
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.7-4.8: VISUALIZE PROPENSITY SCORES")
 print("="*80)
@@ -386,9 +531,7 @@ print("\n" + "="*80)
 print("PROPENSITY SCORE VISUALIZATION COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.9: STOP AND THINK - COMMON SUPPORT ASSESSMENT
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.9: STOP AND THINK - COMMON SUPPORT ASSESSMENT")
 print("="*80)
@@ -462,9 +605,7 @@ print("\n⚠️  PLEASE REVIEW THE ABOVE ANALYSIS AND PROVIDE GO-AHEAD TO PROCEE
 print("   to the next step (Task 4.10: Calculate IPW Weights)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.10-4.11: CALCULATE IPW WEIGHTS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.10-4.11: CALCULATE IPW WEIGHTS")
 print("="*80)
@@ -567,9 +708,7 @@ print("\n" + "="*80)
 print("IPW WEIGHT CALCULATION COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.12: STOP AND THINK - WEIGHT ASSESSMENT
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.12: STOP AND THINK - WEIGHT ASSESSMENT")
 print("="*80)
@@ -675,9 +814,7 @@ print("\n⚠️  PLEASE REVIEW THE ABOVE ANALYSIS AND PROVIDE GO-AHEAD TO PROCEE
 print("   to the next step (Task 4.13: Check Post-Weighting Balance)")
 print("="*80)
 
-# ============================================================================
 # WEIGHT TRIMMING AND STABILIZATION (if recommended)
-# ============================================================================
 print("\n" + "="*80)
 print("WEIGHT TRIMMING AND STABILIZATION")
 print("="*80)
@@ -789,9 +926,7 @@ print("\n" + "="*80)
 print("WEIGHT TRIMMING/STABILIZATION COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.13-4.14: CHECK POST-WEIGHTING BALANCE
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.13-4.14: CHECK POST-WEIGHTING BALANCE")
 print("="*80)
@@ -1009,9 +1144,7 @@ balance_output_path = 'outputs/tables/balance_comparison.csv'
 balance_comparison.to_csv(balance_output_path, index=False)
 print(f"\n✓ Saved balance comparison table to: {balance_output_path}")
 
-# ============================================================================
 # SECTION 4.15: STOP AND THINK - BALANCE IMPROVEMENT ASSESSMENT
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.15: STOP AND THINK - BALANCE IMPROVEMENT ASSESSMENT")
 print("="*80)
@@ -1104,9 +1237,7 @@ print("\n⚠️  PLEASE REVIEW THE ABOVE ANALYSIS AND PROVIDE GO-AHEAD TO PROCEE
 print("   to the next step (Task 4.16: Save Balance Comparison)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.17-4.19: ESTIMATE ATE FOR EARNINGS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.17-4.19: ESTIMATE ATE FOR EARNINGS")
 print("="*80)
@@ -1236,9 +1367,7 @@ print("\n" + "="*80)
 print("ATE ESTIMATION COMPLETE (EARNINGS)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.19: STOP AND THINK - EARNINGS ATE INTERPRETATION
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.19: STOP AND THINK - EARNINGS ATE INTERPRETATION")
 print("="*80)
@@ -1347,9 +1476,7 @@ print("\n⚠️  PLEASE REVIEW THE ABOVE ANALYSIS AND PROVIDE GO-AHEAD TO PROCEE
 print("   to the next step (Task 4.20: Estimate ATE for Graduation Rate)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.20-4.22: ESTIMATE ATE FOR GRADUATION RATE
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.20-4.22: ESTIMATE ATE FOR GRADUATION RATE")
 print("="*80)
@@ -1479,9 +1606,7 @@ print("\n" + "="*80)
 print("ATE ESTIMATION COMPLETE (GRADUATION RATE)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.22: STOP AND THINK - GRADUATION RATE ATE INTERPRETATION
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.22: STOP AND THINK - GRADUATION RATE ATE INTERPRETATION")
 print("="*80)
@@ -1612,9 +1737,7 @@ print("\n⚠️  PLEASE REVIEW THE ABOVE ANALYSIS AND PROVIDE GO-AHEAD TO PROCEE
 print("   to the next step (Task 4.23: Format IPW Results)")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.23-4.24: FORMAT AND SAVE IPW RESULTS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.23-4.24: FORMAT AND SAVE IPW RESULTS")
 print("="*80)
@@ -1704,9 +1827,7 @@ print("\n" + "="*80)
 print("IPW RESULTS FORMATTING COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.25-4.27: DOUBLY ROBUST ESTIMATION
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.25-4.27: DOUBLY ROBUST ESTIMATION")
 print("="*80)
@@ -1749,9 +1870,7 @@ else:
     print(f"  Sample size: {len(X_all_dr):,}")
     print(f"  Number of features: {X_all_dr.shape[1]}")
     
-    # ========================================================================
     # DR ESTIMATION FOR EARNINGS
-    # ========================================================================
     print("\n" + "="*80)
     print("DOUBLY ROBUST ESTIMATION: EARNINGS")
     print("="*80)
@@ -1909,9 +2028,7 @@ else:
         print("\n⚠️  No valid data for earnings DR estimation")
         dr_earnings_results = None
     
-    # ========================================================================
     # DR ESTIMATION FOR GRADUATION RATE
-    # ========================================================================
     print("\n" + "="*80)
     print("DOUBLY ROBUST ESTIMATION: GRADUATION RATE")
     print("="*80)
@@ -2064,9 +2181,7 @@ else:
         print("\n⚠️  No valid data for graduation rate DR estimation")
         dr_grad_results = None
     
-    # ========================================================================
     # SECTION 4.27: STOP AND THINK - DR vs IPW COMPARISON
-    # ========================================================================
     if dr_earnings_results is not None or dr_grad_results is not None:
         print("\n" + "="*80)
         print("SECTION 4.27: STOP AND THINK - DR vs IPW COMPARISON")
@@ -2170,9 +2285,7 @@ else:
     print("DOUBLY ROBUST ESTIMATION COMPLETE")
     print("="*80)
 
-# ============================================================================
 # SECTION 4.32: DOWHY - CAUSAL GRAPH
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.32: DOWHY - CAUSAL GRAPH")
 print("="*80)
@@ -2294,9 +2407,7 @@ else:
     print(f"  - Number of confounders: {len(confounder_names_dw)}")
     print(f"  - Edges: All confounders → Treatment, All confounders → Outcomes, Treatment → Outcomes")
 
-    # ========================================================================
     # SECTION 4.33: CREATE DOWHY CAUSAL MODEL AND IDENTIFY ESTIMAND
-    # ========================================================================
     print("\n" + "="*80)
     print("SECTION 4.33: CREATE DOWHY CAUSAL MODEL AND IDENTIFY ESTIMAND")
     print("="*80)
@@ -2375,9 +2486,7 @@ else:
         model_earnings = None
         identified_estimand_earnings = None
     
-    # ========================================================================
     # SECTION 4.34: STOP AND THINK - VERIFY ESTIMAND IDENTIFICATION
-    # ========================================================================
     if model_earnings is not None and identified_estimand_earnings is not None:
         print("\n" + "="*80)
         print("SECTION 4.34: STOP AND THINK - VERIFY ESTIMAND IDENTIFICATION")
@@ -2414,9 +2523,7 @@ else:
         print("STOP AND THINK COMPLETE - PROCEEDING TO ESTIMATION")
         print("="*80)
     
-    # ========================================================================
     # SECTION 4.35-4.36: DOWHY ESTIMATION
-    # ========================================================================
     if model_earnings is not None and identified_estimand_earnings is not None:
         print("\n" + "="*80)
         print("SECTION 4.35-4.36: DOWHY ESTIMATION")
@@ -2541,9 +2648,7 @@ else:
         causal_estimate_earnings = None
         dowhy_earnings_results = None
     
-    # ========================================================================
     # SECTION 4.37: STOP AND THINK - COMPARE TO IPW AND DR
-    # ========================================================================
     if dowhy_earnings_results is not None:
         print("\n" + "="*80)
         print("SECTION 4.37: STOP AND THINK - COMPARE TO IPW AND DR")
@@ -2599,9 +2704,7 @@ else:
         print("COMPARISON COMPLETE")
         print("="*80)
     
-    # ========================================================================
     # SECTION 4.38-4.40: DOWHY REFUTATION TESTS
-    # ========================================================================
     if causal_estimate_earnings is not None:
         print("\n" + "="*80)
         print("SECTION 4.38-4.40: DOWHY REFUTATION TESTS")
@@ -2740,9 +2843,7 @@ else:
         print("\n⚠️  Skipping refutation tests - Causal estimate not available")
         refutation_results_earnings = None
     
-    # ========================================================================
     # SECTION 4.41-4.43: DOWHY FOR GRADUATION RATE
-    # ========================================================================
     print("\n" + "="*80)
     print("SECTION 4.41-4.43: DOWHY FOR GRADUATION RATE")
     print("="*80)
@@ -2932,9 +3033,7 @@ else:
         dowhy_grad_results = None
         refutation_results_grad = None
     
-    # ========================================================================
     # SECTION 4.44: SAVE DOWHY RESULTS
-    # ========================================================================
     print("\n" + "="*80)
     print("SECTION 4.44: SAVE DOWHY RESULTS")
     print("="*80)
@@ -2998,9 +3097,7 @@ else:
     print("DOWHY ANALYSIS COMPLETE")
     print("="*80)
 
-# ============================================================================
 # SECTION 4.45-4.47: OLS REGRESSION FOR EARNINGS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.45-4.47: OLS REGRESSION FOR EARNINGS")
 print("="*80)
@@ -3221,9 +3318,7 @@ except Exception as e:
     ols_earnings_results = None
     ols_model_earnings = None
 
-# ============================================================================
 # SECTION 4.48-4.50: OLS REGRESSION FOR GRADUATION RATE
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.48-4.50: OLS REGRESSION FOR GRADUATION RATE")
 print("="*80)
@@ -3363,9 +3458,7 @@ except Exception as e:
     ols_grad_results = None
     ols_model_grad = None
 
-# ============================================================================
 # SECTION 4.51: SAVE OLS RESULTS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.51: SAVE OLS RESULTS")
 print("="*80)
@@ -3429,9 +3522,7 @@ print("\n" + "="*80)
 print("OLS REGRESSION COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.52-4.55: COMPARE ALL METHODS
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.52-4.55: COMPARE ALL METHODS")
 print("="*80)
@@ -3579,9 +3670,7 @@ comparison_df = pd.DataFrame(comparison_data)
 
 print("\nStep 2: Analyzing method consistency...")
 
-# ============================================================================
 # SECTION 4.54: STOP AND THINK - CRITICAL DECISION POINT
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.54: STOP AND THINK - CRITICAL DECISION POINT")
 print("="*80)
@@ -3758,9 +3847,7 @@ print("\n" + "="*80)
 print("STOP AND THINK COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.55: SAVE METHODS COMPARISON
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.55: SAVE METHODS COMPARISON")
 print("="*80)
@@ -3773,9 +3860,7 @@ print("\n" + "="*80)
 print("METHODS COMPARISON COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.56: UPDATE UTILS.PY
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.56: UPDATE UTILS.PY")
 print("="*80)
@@ -3793,9 +3878,7 @@ print("\n" + "="*80)
 print("UTILS.PY UPDATE NOTE COMPLETE")
 print("="*80)
 
-# ============================================================================
 # SECTION 4.57: CAUSAL INFERENCE CHECKPOINT
-# ============================================================================
 print("\n" + "="*80)
 print("SECTION 4.57: CAUSAL INFERENCE CHECKPOINT")
 print("="*80)
