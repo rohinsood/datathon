@@ -1,0 +1,8 @@
+Variable 1,Variable 2,Correlation
+pct_white_imputed,pct_urm,-0.8204383774415044
+pct_white_imputed,is_msi,-0.7271365865266537
+pct_black_imputed,pct_urm,0.7587405446726336
+pct_black_imputed,is_hbcu,0.8319490944092329
+pct_latino_imputed,is_hsi,0.7502144158627803
+pct_urm,is_msi,0.7276081145015144
+is_hsi,is_msi,0.7020008637840377

@@ -1,0 +1,42 @@
+{
+  "random_state": 42,
+  "target_variable": "earnings_10yr",
+  "numeric_features": [
+    "afford_gap_cont",
+    "admit_rate_imputed",
+    "sat_composite_25_imputed",
+    "act_composite_25_imputed",
+    "sat_missing",
+    "act_missing",
+    "log_instructional_exp",
+    "log_endowment",
+    "has_endowment",
+    "pct_pell_imputed",
+    "pct_urm",
+    "pct_white_imputed",
+    "pct_women_imputed",
+    "is_hbcu",
+    "is_hsi",
+    "is_tcu",
+    "is_aanapisi",
+    "is_pbi"
+  ],
+  "categorical_features": [
+    "sector",
+    "size_category",
+    "region"
+  ],
+  "affordability_feature": "afford_gap_cont",
+  "median_pell_threshold": 44.0,
+  "test_set_proportion": 0.2,
+  "n_estimators": 500,
+  "max_depth": 25,
+  "training_date": "2025-11-15",
+  "model_descriptions": {
+    "R1a": "Full model with all features including affordability gap",
+    "R1b": "Baseline model without affordability gap",
+    "R1c": "Model with affordability \u00d7 Pell and affordability \u00d7 URM interactions",
+    "R1d_high": "Subgroup model for high-Pell institutions (\u2265median)",
+    "R1d_low": "Subgroup model for low-Pell institutions (<median)"
+  }
+}

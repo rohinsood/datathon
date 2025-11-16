@@ -1,0 +1,35 @@
+{
+  "treatment": "treatment",
+  "outcomes": [
+    "earnings_10yr",
+    "grad_rate_6yr"
+  ],
+  "confounders": [
+    "admit_rate_imputed",
+    "sat_composite_25_imputed",
+    "sat_missing",
+    "log_instructional_exp",
+    "log_endowment",
+    "has_endowment",
+    "pct_pell_imputed",
+    "pct_white_imputed",
+    "pct_black_imputed",
+    "pct_latino_imputed",
+    "pct_asian_imputed",
+    "pct_women_imputed",
+    "pct_urm",
+    "is_hbcu",
+    "is_hsi",
+    "is_tcu",
+    "is_aanapisi",
+    "is_pbi",
+    "is_msi"
+  ],
+  "categorical": [
+    "sector",
+    "size_category",
+    "region",
+    "control",
+    "state"
+  ]
+}
