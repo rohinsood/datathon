@@ -125,29 +125,29 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.34 **SAVE ANALYSIS-READY DATA** - Save feature-engineered dataset to `/outputs/data/analysis_ready.csv`, also save variable lists to `/outputs/data/variable_lists.json`
   - [x] 2.35 **FINAL CHECKPOINT:** Print summary: total N, treatment group sizes (both >200?), outcome variable ranges, number of confounders. Document: "Feature engineering complete. Ready for causal analysis."
 
-- [x] 3.0 Exploratory data analysis (Script: `02_exploratory_analysis.py`)
-  - [x] 3.1 **LOAD ANALYSIS-READY DATA** - Write code to load `/outputs/data/analysis_ready.csv` and variable lists
-  - [x] 3.2 **RUN & ANALYZE:** Execute load, print shape and verify all engineered features present
-  - [x] 3.3 **STOP AND THINK:** Does data look correct? Any unexpected changes from saved file? Verify treatment/outcome/confounder variables all present.
-  - [x] 3.4 **DESCRIPTIVE STATS BY TREATMENT GROUP** - Write code to generate descriptive statistics table comparing low gap vs high gap institutions
-  - [x] 3.5 **RUN & ANALYZE:** Execute comparison, print mean, std, min, max for key variables by treatment group
-  - [x] 3.6 **STOP AND THINK:** Do low-gap institutions look different from high-gap on outcomes? On confounders? If outcomes already differ without controlling for confounders, note this. Document initial patterns.
-  - [x] 3.7 **SAVE DESCRIPTIVE TABLE** - Save descriptive stats to `/outputs/tables/descriptive_stats.csv`
-  - [x] 3.8 **CORRELATION ANALYSIS** - Write code to create correlation matrix for key continuous variables (treatment, outcomes, main confounders)
-  - [x] 3.9 **RUN & ANALYZE:** Execute correlation analysis, visualize with heatmap, print highly correlated pairs (|r| > 0.7)
-  - [x] 3.10 **STOP AND THINK:** Which confounders are multicollinear? Should you drop any or create composite indices? Is treatment correlated with outcomes (good - suggests signal)? Is treatment correlated with confounders (expected - that's why we need causal methods)? Document multicollinearity concerns.
-  - [x] 3.11 **OUTCOME DISTRIBUTIONS** - Write code to plot histograms for earnings and graduation rate outcomes with KDE overlay
-  - [x] 3.12 **RUN & ANALYZE:** Execute distribution plots, create separate box plots by treatment group
-  - [x] 3.13 **STOP AND THINK:** Are distributions normal, skewed, bimodal? Do treatment groups have different distributions? Check for outliers (>3 SD from mean). Should you transform outcomes or trim outliers? Document decision.
-  - [x] 3.14 **OUTLIER DETECTION** - Based on your observation, write code to identify outliers using IQR method or z-scores
-  - [x] 3.15 **RUN & ANALYZE:** Execute outlier detection, print number and characteristics of outliers
-  - [x] 3.16 **STOP AND THINK:** Are outliers data errors or legitimate extreme values? Should you winsorize at 1st/99th percentile or exclude entirely? What's the impact on sample size? Make decision and document rationale.
-  - [x] 3.17 **APPLY OUTLIER HANDLING** - If you decided to handle outliers, write and execute code to do so, save updated data
-  - [x] 3.18 **TREATMENT GROUP BALANCE CHECK (PRE-MATCHING)** - Write code to calculate standardized mean differences (SMD) for all confounders between treatment groups
-  - [x] 3.19 **RUN & ANALYZE:** Execute balance check, print SMD for each confounder, identify which have |SMD| > 0.1 (imbalanced)
-  - [x] 3.20 **STOP AND THINK:** How many confounders are imbalanced? This is expected pre-matching - it justifies using causal methods. Which confounders have largest imbalance? These are most important to balance. Document pre-matching imbalance.
-  - [x] 3.21 **CREATE BALANCE TABLE** - Write code to create formatted balance table with SMD for key confounders, save to `/outputs/tables/balance_pre_matching.csv`
-  - [x] 3.22 **FINAL EDA CHECKPOINT:** Verify treatment groups have >200 each, outcomes vary meaningfully, confounders show imbalance. Document: "EDA complete. Proceeding to causal inference with N=[X], treatment imbalanced on [Y] confounders."
+- [ ] 3.0 Exploratory data analysis (Script: `02_exploratory_analysis.py`)
+  - [ ] 3.1 **LOAD ANALYSIS-READY DATA** - Write code to load `/outputs/data/analysis_ready.csv` and variable lists
+  - [ ] 3.2 **RUN & ANALYZE:** Execute load, print shape and verify all engineered features present
+  - [ ] 3.3 **STOP AND THINK:** Does data look correct? Any unexpected changes from saved file? Verify treatment/outcome/confounder variables all present.
+  - [ ] 3.4 **DESCRIPTIVE STATS BY TREATMENT GROUP** - Write code to generate descriptive statistics table comparing low gap vs high gap institutions
+  - [ ] 3.5 **RUN & ANALYZE:** Execute comparison, print mean, std, min, max for key variables by treatment group
+  - [ ] 3.6 **STOP AND THINK:** Do low-gap institutions look different from high-gap on outcomes? On confounders? If outcomes already differ without controlling for confounders, note this. Document initial patterns.
+  - [ ] 3.7 **SAVE DESCRIPTIVE TABLE** - Save descriptive stats to `/outputs/tables/descriptive_stats.csv`
+  - [ ] 3.8 **CORRELATION ANALYSIS** - Write code to create correlation matrix for key continuous variables (treatment, outcomes, main confounders)
+  - [ ] 3.9 **RUN & ANALYZE:** Execute correlation analysis, visualize with heatmap, print highly correlated pairs (|r| > 0.7)
+  - [ ] 3.10 **STOP AND THINK:** Which confounders are multicollinear? Should you drop any or create composite indices? Is treatment correlated with outcomes (good - suggests signal)? Is treatment correlated with confounders (expected - that's why we need causal methods)? Document multicollinearity concerns.
+  - [ ] 3.11 **OUTCOME DISTRIBUTIONS** - Write code to plot histograms for earnings and graduation rate outcomes with KDE overlay
+  - [ ] 3.12 **RUN & ANALYZE:** Execute distribution plots, create separate box plots by treatment group
+  - [ ] 3.13 **STOP AND THINK:** Are distributions normal, skewed, bimodal? Do treatment groups have different distributions? Check for outliers (>3 SD from mean). Should you transform outcomes or trim outliers? Document decision.
+  - [ ] 3.14 **OUTLIER DETECTION** - Based on your observation, write code to identify outliers using IQR method or z-scores
+  - [ ] 3.15 **RUN & ANALYZE:** Execute outlier detection, print number and characteristics of outliers
+  - [ ] 3.16 **STOP AND THINK:** Are outliers data errors or legitimate extreme values? Should you winsorize at 1st/99th percentile or exclude entirely? What's the impact on sample size? Make decision and document rationale.
+  - [ ] 3.17 **APPLY OUTLIER HANDLING** - If you decided to handle outliers, write and execute code to do so, save updated data
+  - [ ] 3.18 **TREATMENT GROUP BALANCE CHECK (PRE-MATCHING)** - Write code to calculate standardized mean differences (SMD) for all confounders between treatment groups
+  - [ ] 3.19 **RUN & ANALYZE:** Execute balance check, print SMD for each confounder, identify which have |SMD| > 0.1 (imbalanced)
+  - [ ] 3.20 **STOP AND THINK:** How many confounders are imbalanced? This is expected pre-matching - it justifies using causal methods. Which confounders have largest imbalance? These are most important to balance. Document pre-matching imbalance.
+  - [ ] 3.21 **CREATE BALANCE TABLE** - Write code to create formatted balance table with SMD for key confounders, save to `/outputs/tables/balance_pre_matching.csv`
+  - [ ] 3.22 **FINAL EDA CHECKPOINT:** Verify treatment groups have >200 each, outcomes vary meaningfully, confounders show imbalance. Document: "EDA complete. Proceeding to causal inference with N=[X], treatment imbalanced on [Y] confounders."
 
 - [ ] 4.0 Implement core causal inference methods (Script: `03_causal_inference.py`)
   - [ ] 4.1 **SETUP CAUSAL ANALYSIS** - Write code to load analysis-ready data, import causal inference libraries, define treatment/outcome/confounder lists
