@@ -1,6 +1,6 @@
 """
-Earnings Mobility Predictor: Random Forest Regression Analysis
-================================================================
+Earnings Mobility Predictor: Random Forest Regression Analysis (OPTIMIZED)
+===========================================================================
 
 This script implements four regression models to assess the importance of 
 affordability gap in predicting 10-year earnings outcomes:
@@ -9,6 +9,19 @@ R1a: Core Model - Full model with affordability gap
 R1b: Baseline Model - Same model without affordability gap
 R1c: Interaction Model - Affordability × Pell and × URM interactions
 R1d: Subgroup Models - High-Pell vs Low-Pell institutions
+
+IMPROVEMENTS IN THIS VERSION:
+-----------------------------
+1. Added missingness flags (sat_missing, act_missing) to address imputation bias
+2. Optimized RF hyperparameters:
+   - Increased n_estimators: 200 → 500 (more trees = better predictions)
+   - Increased max_depth: 20 → 25 (capture more complex patterns)
+   - Decreased min_samples_split: 10 → 5 (finer splits)
+   - Decreased min_samples_leaf: 5 → 2 (more granular leaves)
+   - Added max_features='sqrt' (better generalization)
+3. Total features: 29 → 31 (added 2 missingness indicators)
+
+Expected Impact: Better R², lower RMSE, more robust feature importance rankings
 
 Author: Data Science Team
 Date: November 2025
@@ -26,6 +39,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.inspection import permutation_importance
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import json
+import joblib
+import os
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -59,6 +74,8 @@ SELECTIVITY_FEATURES = [
     'admit_rate_imputed',           # admit_rate
     'sat_composite_25_imputed',     # avg_SAT
     'act_composite_25_imputed',     # avg_ACT
+    'sat_missing',                  # flag: missing SAT scores
+    'act_missing',                  # flag: missing ACT scores
 ]
 
 RESOURCE_FEATURES = [
@@ -89,6 +106,8 @@ GEOGRAPHY_FEATURES = [
 ALL_NUMERIC_FEATURES = (AFFORDABILITY_FEATURES + SELECTIVITY_FEATURES + 
                         RESOURCE_FEATURES + DEMOGRAPHIC_FEATURES + 
                         ['is_hbcu', 'is_hsi', 'is_tcu', 'is_aanapisi', 'is_pbi'])
+
+# Note: SELECTIVITY_FEATURES now includes sat_missing and act_missing flags
 
 ALL_CATEGORICAL_FEATURES = ['sector', 'size_category', 'region']
 
@@ -164,10 +183,11 @@ print("="*100)
 model_r1a = Pipeline([
     ('preprocessor', preprocessor),
     ('regressor', RandomForestRegressor(
-        n_estimators=200,
-        max_depth=20,
-        min_samples_split=10,
-        min_samples_leaf=5,
+        n_estimators=500,          # Increased from 200 for better accuracy
+        max_depth=25,              # Increased from 20 for more complex patterns
+        min_samples_split=5,       # Decreased from 10 for finer splits
+        min_samples_leaf=2,        # Decreased from 5 to capture more patterns
+        max_features='sqrt',       # Added for better generalization
         random_state=RANDOM_STATE,
         n_jobs=-1
     ))
@@ -244,10 +264,11 @@ preprocessor_no_afford = ColumnTransformer(
 model_r1b = Pipeline([
     ('preprocessor', preprocessor_no_afford),
     ('regressor', RandomForestRegressor(
-        n_estimators=200,
-        max_depth=20,
-        min_samples_split=10,
-        min_samples_leaf=5,
+        n_estimators=500,          # Increased from 200 for better accuracy
+        max_depth=25,              # Increased from 20 for more complex patterns
+        min_samples_split=5,       # Decreased from 10 for finer splits
+        min_samples_leaf=2,        # Decreased from 5 to capture more patterns
+        max_features='sqrt',       # Added for better generalization
         random_state=RANDOM_STATE,
         n_jobs=-1
     ))
@@ -320,10 +341,11 @@ preprocessor_int = ColumnTransformer(
 model_r1c = Pipeline([
     ('preprocessor', preprocessor_int),
     ('regressor', RandomForestRegressor(
-        n_estimators=200,
-        max_depth=20,
-        min_samples_split=10,
-        min_samples_leaf=5,
+        n_estimators=500,          # Increased from 200 for better accuracy
+        max_depth=25,              # Increased from 20 for more complex patterns
+        min_samples_split=5,       # Decreased from 10 for finer splits
+        min_samples_leaf=2,        # Decreased from 5 to capture more patterns
+        max_features='sqrt',       # Added for better generalization
         random_state=RANDOM_STATE,
         n_jobs=-1
     ))
@@ -516,6 +538,64 @@ results_high_pell['importance_df'].to_csv('outputs/rf_analysis/feature_importanc
 results_low_pell['importance_df'].to_csv('outputs/rf_analysis/feature_importance_low_pell.csv', index=False)
 print("✓ Saved: outputs/rf_analysis/feature_importance_high_pell.csv")
 print("✓ Saved: outputs/rf_analysis/feature_importance_low_pell.csv")
+
+# ============================================================================
+# 9. SAVE TRAINED MODELS
+# ============================================================================
+print("\n" + "="*100)
+print("SAVING TRAINED MODELS")
+print("="*100)
+
+# Create models directory
+os.makedirs('outputs/rf_analysis/models', exist_ok=True)
+
+# Save R1a (Full Model)
+joblib.dump(model_r1a, 'outputs/rf_analysis/models/model_r1a_full.pkl')
+print("✓ Saved: outputs/rf_analysis/models/model_r1a_full.pkl")
+
+# Save R1b (No Affordability)
+joblib.dump(model_r1b, 'outputs/rf_analysis/models/model_r1b_no_afford.pkl')
+print("✓ Saved: outputs/rf_analysis/models/model_r1b_no_afford.pkl")
+
+# Save R1c (Interactions)
+joblib.dump(model_r1c, 'outputs/rf_analysis/models/model_r1c_interactions.pkl')
+print("✓ Saved: outputs/rf_analysis/models/model_r1c_interactions.pkl")
+
+# Save R1d High-Pell subgroup model
+joblib.dump(results_high_pell['model'], 'outputs/rf_analysis/models/model_r1d_high_pell.pkl')
+print("✓ Saved: outputs/rf_analysis/models/model_r1d_high_pell.pkl")
+
+# Save R1d Low-Pell subgroup model
+joblib.dump(results_low_pell['model'], 'outputs/rf_analysis/models/model_r1d_low_pell.pkl')
+print("✓ Saved: outputs/rf_analysis/models/model_r1d_low_pell.pkl")
+
+# Save feature lists and metadata for future use
+model_metadata = {
+    'random_state': RANDOM_STATE,
+    'target_variable': TARGET,
+    'numeric_features': ALL_NUMERIC_FEATURES_CLEAN,
+    'categorical_features': ALL_CATEGORICAL_FEATURES,
+    'affordability_feature': 'afford_gap_cont',
+    'median_pell_threshold': pell_median,
+    'test_set_proportion': 0.2,
+    'n_estimators': 500,
+    'max_depth': 25,
+    'training_date': '2025-11-15',
+    'model_descriptions': {
+        'R1a': 'Full model with all features including affordability gap',
+        'R1b': 'Baseline model without affordability gap',
+        'R1c': 'Model with affordability × Pell and affordability × URM interactions',
+        'R1d_high': 'Subgroup model for high-Pell institutions (≥median)',
+        'R1d_low': 'Subgroup model for low-Pell institutions (<median)'
+    }
+}
+
+with open('outputs/rf_analysis/models/model_metadata.json', 'w') as f:
+    json.dump(model_metadata, f, indent=2)
+print("✓ Saved: outputs/rf_analysis/models/model_metadata.json")
+
+print("\n💾 All 5 models saved successfully!")
+print(f"   Total model size: ~{(os.path.getsize('outputs/rf_analysis/models/model_r1a_full.pkl') * 5 / 1024 / 1024):.1f} MB")
 
 print("\n" + "="*100)
 print("✓ EARNINGS MOBILITY RF ANALYSIS COMPLETE")
