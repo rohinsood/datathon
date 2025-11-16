@@ -52,15 +52,15 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Tasks
 
-- [ ] 0.0 Create feature branch and project structure
-  - [ ] 0.1 Create and checkout a new branch (e.g., `git checkout -b analysis/affordability-mobility`)
-  - [ ] 0.2 Create directory structure: `/src/`, `/outputs/`, `/outputs/figures/`, `/outputs/tables/`, `/outputs/data/`, `/outputs/logs/`
-  - [ ] 0.3 Create `requirements.txt` with dependencies: pandas, numpy, scipy, statsmodels, scikit-learn, dowhy, econml, causalml, matplotlib, seaborn, plotly, shap, jupyter, nbformat, ipykernel
-  - [ ] 0.4 Initialize virtual environment and install dependencies
-  - [ ] 0.5 Create placeholder Python scripts: `01_data_preparation.py`, `02_exploratory_analysis.py`, `03_causal_inference.py`, `04_equity_analysis.py`, `05_visualizations.py`, `06_final_report.py`
-  - [ ] 0.6 Create `/src/utils.py` for helper functions
-  - [ ] 0.7 Create `/outputs/logs/analysis_log.md` to document findings and decisions at each step
-  - [ ] 0.8 Set up `.gitignore` to exclude large data files, outputs, and __pycache__/
+- [x] 0.0 Create feature branch and project structure
+  - [x] 0.1 Create and checkout a new branch (e.g., `git checkout -b analysis/affordability-mobility`)
+  - [x] 0.2 Create directory structure: `/src/`, `/outputs/`, `/outputs/figures/`, `/outputs/tables/`, `/outputs/data/`, `/outputs/logs/`
+  - [x] 0.3 Create `requirements.txt` with dependencies: pandas, numpy, scipy, statsmodels, scikit-learn, dowhy, econml, causalml, matplotlib, seaborn, plotly, shap, jupyter, nbformat, ipykernel
+  - [x] 0.4 Initialize virtual environment and install dependencies
+  - [x] 0.5 Create placeholder Python scripts: `01_data_preparation.py`, `02_exploratory_analysis.py`, `03_causal_inference.py`, `04_equity_analysis.py`, `05_visualizations.py`, `06_final_report.py`
+  - [x] 0.6 Create `/src/utils.py` for helper functions
+  - [x] 0.7 Create `/outputs/logs/analysis_log.md` to document findings and decisions at each step
+  - [x] 0.8 Set up `.gitignore` to exclude large data files, outputs, and __pycache__/
 
 - [x] 1.0 Data loading, cleaning, and merge (Script: `01_data_preparation.py`)
   - [x] 1.1 **DATA LOADING SECTION** - Write code to load both datasets with proper encoding and dtypes
