@@ -92,7 +92,7 @@ def main():
     print("=== COLLEGE COMPARISON ANALYSIS ===\n")
     
     # Load data
-    csv_path = '/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv'
+    csv_path = '../fronted/data/merged_clean.csv'
     raw_data = load_college_data(csv_path)
     
     if not raw_data:

@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Read the CSV file
-df = pd.read_csv('/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv')
+df = pd.read_csv('../fronted/data/merged_clean.csv')
 
 # Get basic info about the dataset
 print("Dataset shape:", df.shape)

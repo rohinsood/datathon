@@ -123,7 +123,7 @@ def main():
     print("=== INTERACTIVE COLLEGE SEARCH & COMPARISON ===\n")
     
     # Load data
-    csv_path = '/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv'
+    csv_path = '../fronted/data/merged_clean.csv'
     colleges = load_college_data(csv_path)
     
     if not colleges:

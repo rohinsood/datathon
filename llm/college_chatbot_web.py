@@ -126,7 +126,7 @@ document.getElementById('input').addEventListener('keypress', function(e){
             self.end_headers()
             self.wfile.write(json.dumps({'response': response}).encode())
 
-bot = CollegeChatbot('/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv')
+bot = CollegeChatbot('../fronted/data/merged_clean.csv')
 
 if __name__ == '__main__':
     server = HTTPServer(('localhost', 8000), ChatHandler)

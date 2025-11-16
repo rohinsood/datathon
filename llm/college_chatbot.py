@@ -105,7 +105,7 @@ class CollegeChatbot:
                "- 'Compare [college1] and [college2]'"
 
 def main():
-    bot = CollegeChatbot('/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv')
+    bot = CollegeChatbot('../fronted/data/merged_clean.csv')
     print("College Chatbot Ready! Ask me about colleges.")
     
     while True:

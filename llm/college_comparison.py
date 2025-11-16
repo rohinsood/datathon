@@ -69,7 +69,7 @@ def generate_summary_stats(df):
 
 def main():
     # Load and analyze the data
-    csv_path = '/Users/prashantvaid/Desktop/datathonUI/my-app/data/merged_clean.csv'
+    csv_path = '../fronted/data/merged_clean.csv'
     df = load_and_analyze_colleges(csv_path)
     
     if df is None:
